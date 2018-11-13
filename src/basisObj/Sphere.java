@@ -13,19 +13,19 @@ public class Sphere {
 		    for (int j = 0; j<YSTEP; ++j) {
 		      double b = Math.toRadians(-90+180*(double)(j)/(YSTEP-1));
 		      for (int i = 0; i<XZCSTEP; ++i) {
-		        double a = Math.toRadians(360*(double)(i)/(XZCSTEP-1));
-		        double z = Math.cos(b) * Math.cos(a);
-		        double x = Math.cos(b) * Math.sin(a);
-		        double y = Math.sin(b);
-		        int base = j*XZCSTEP*step;
-		        vertices[base + i*step+0] = (float)(r*x);
-		        vertices[base + i*step+1] = (float)(r*y);
-		        vertices[base + i*step+2] = (float)(r*z); 
-		        vertices[base + i*step+3] = (float)x;
-		        vertices[base + i*step+4] = (float)y;
-		        vertices[base + i*step+5] = (float)z;
-		        vertices[base + i*step+6] = (float)(i)/(float)(XZCSTEP-1);
-		        vertices[base + i*step+7] = (float)(j)/(float)(YSTEP-1);
+		    	  double a = Math.toRadians(360*(double)(i)/(XZCSTEP-1));
+		          double z = r*Math.cos(b) * Math.cos(a);
+		          double x = r*Math.cos(b) * Math.sin(a);
+		          double y = r* Math.sin(b);
+		          int base = j*XZCSTEP*step;
+		          vertices[base + i*step+0] = (float)x;
+		          vertices[base + i*step+1] = (float)y;
+		          vertices[base + i*step+2] = (float)z; 
+		          vertices[base + i*step+3] = (float)x;
+		          vertices[base + i*step+4] = (float)y;
+		          vertices[base + i*step+5] = (float)z;
+		          vertices[base + i*step+6] = (float)(i)/(float)(XZCSTEP-1);
+		          vertices[base + i*step+7] = (float)(j)/(float)(YSTEP-1);
 		      }
 		    }
 		    return vertices;
@@ -46,6 +46,7 @@ public class Sphere {
 		    return indices;
 	  }
 	  
-		private static final float[] verteice = createVertices();	  
-		private static final int[] indices = createIndices();	  
+		public static final float[] verteice = createVertices();	  
+		public static final int[] indices = createIndices();
+		  
 }

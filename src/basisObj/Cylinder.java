@@ -98,19 +98,19 @@ public class Cylinder {
 		int[] indices = new int[XZSTEP*10*step];
 		
 		for(int i = 0; i < XZSTEP; i++) {
-//			indices[base + 0] = 0;
-//			indices[base + 1] = point_base + (i+1);
-//			if (i< XZSTEP-1)	{indices[base + 2] = point_base + (i+2);}
-//			else					    { indices[base + 2] = point_base + 1;}
+			indices[base + 0] = 0;
+			indices[base + 1] = point_base + (i+1);
+			if (i< XZSTEP-1)	{indices[base + 2] = point_base + (i+2);}
+			else					    { indices[base + 2] = point_base + 1;}
 			base += step;
 		}
 		point_base += (XZSTEP+1);
 		// top
 		for(int i = 0; i < XZSTEP; i++) {
-//			indices[base + 0] = point_base;
-//			indices[base + 1] = point_base + (i+1);
-//			if (i< XZSTEP-1)	{indices[base + 2] = point_base + (i+2);}
-//			else 					{ indices[base + 2] = point_base + 1;}
+			indices[base + 0] = point_base;
+			indices[base + 1] = point_base + (i+1);
+			if (i< XZSTEP-1)	{indices[base + 2] = point_base + (i+2);}
+			else 					{ indices[base + 2] = point_base + 1;}
 		
 			base += step;
 		}
@@ -125,10 +125,11 @@ public class Cylinder {
 				indices[base + 2] = point_base + XZSTEP  + j;
 				base += step;
 				
-				indices[base + 0] = point_base + j+1;
-				indices[base + 1] = point_base + XZSTEP  + j;
+				indices[base + 0] = point_base + XZSTEP  + j;
+				indices[base + 1] = point_base + j+1;
 				if(j<XZSTEP-1) {indices[base + 2] = point_base + XZSTEP  + j + 1;}
 				else				      {indices[base + 2] = point_base + XZSTEP  + 1;}
+				
 				base += step;
 			}
 			point_base += XZSTEP;
