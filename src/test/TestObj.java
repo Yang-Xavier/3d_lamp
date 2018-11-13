@@ -14,19 +14,24 @@ public static void main(String[] args) {
 //		System.out.println(vec[i]);
 //	}
 	
-	print(1, vec, 8);
-	print(32, vec, 8);
 	print(62, vec, 8);
+	print(63, vec, 8);
 	print(92, vec, 8);
+	print(63, vec, 8);
+	print(92, vec, 8);
+	print(93, vec, 8);
+//
+//	for(int i=0; i< index.length; i++) {
+//		System.out.println(index[i]);
+//	}
+//	System.out.println(index.length);
+//	print(62, index, 3);
+//	print(63, index, 3);
+//	print(92, index, 3);
+//	print(63, index, 3);
+//	print(92, index, 3);
+//	print(93, index, 3);
 
-	for(int i=0; i< index.length; i++) {
-		System.out.println(index[i]);
-	}
-	System.out.println(index.length);
-	print(31, index, 3);
-	print(58, index, 3);
-	print(59, index, 3);
-	print(60, index, 3);
 }
 
 public static void print(int index, float[] a,int step) {
