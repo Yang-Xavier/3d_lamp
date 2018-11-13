@@ -5,7 +5,7 @@ public class Sphere {
 	  private static final int XZCSTEP= 36;
 	  private static final int  YSTEP = 36;	
 	  
-	  private float[] createVertices() {
+	  private static float[] createVertices() {
 		    double r = 0.5;
 		    int step = 8;
 		    float[] vertices = new float[XZCSTEP*YSTEP*step];
@@ -30,7 +30,7 @@ public class Sphere {
 		    }
 		    return vertices;
 		  }
-	  private int[] createIndices() {
+	  private static int[] createIndices() {
 		    int[] indices = new int[(XZCSTEP-1)*(YSTEP-1)*6];
 		    for (int j = 0; j<YSTEP-1; ++j) {
 		      for (int i = 0; i<YSTEP-1; ++i) {
@@ -46,6 +46,6 @@ public class Sphere {
 		    return indices;
 	  }
 	  
-		private final float[] verteice = createVertices();	  
-		private final int[] indices = createIndices();	  
+		private static final float[] verteice = createVertices();	  
+		private static final int[] indices = createIndices();	  
 }
