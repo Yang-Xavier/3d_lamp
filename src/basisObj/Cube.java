@@ -1,7 +1,9 @@
 package basisObj;
 
 public final class Cube {
-	private final float[] vertives = new float[]{
+
+
+	public final static float[] vertices = new float[]{
 			// x, y, z, nx, ny, nz, s, t
 		  -0.5f, -0.5f, -0.5f,  -1, 0, 0,  0.0f, 0.0f,  // 0
 		  -0.5f, -0.5f,  0.5f,  -1, 0, 0,  1.0f, 0.0f,  // 1
@@ -31,7 +33,7 @@ public final class Cube {
 		   0.5f,  0.5f,  0.5f,  0,1,0,   1.0f, 0.0f   // 23
 	};
 	
-	private final int[] indices = new int[] {
+	public final static int[] indices = new int[] {
 			 0,1,3, // x -ve 
 		      3,2,0, // x -ve
 		      4,6,7, // x +ve
