@@ -2,6 +2,7 @@ package main;
 
 import gmaths.*;
 import scene.*;
+import test.TestCube;
 import tool.*;
 
 import java.nio.*;
@@ -15,6 +16,9 @@ import basisObj.*;
 public class MyGLEventListener implements GLEventListener {
 		
 	String TestTexture = Constant.TEXTURE_BASEPATH+"brickwall.jpg";
+	Light light;
+	Model[] static_models;
+	TestCube tc;
 
 	// scene model
 	private Camera camera;
@@ -64,8 +68,7 @@ public class MyGLEventListener implements GLEventListener {
 	    camera.setPerspectiveMatrix(Mat4Transform.perspective(45, aspect));
 	}
 	
-	Light light;
-	Model[] models;
+
 	public void initialise(GL3 gl) {
 		int[] testTexture = TextureLibrary.loadTexture(gl, TestTexture);
 		
@@ -81,6 +84,9 @@ public class MyGLEventListener implements GLEventListener {
 	    cmodelMatrix = Mat4.multiply(cmodelMatrix, Mat4Transform.rotateAroundZ((float) 50));
 	    Model cylinder = new Model(gl, camera, light, shader, cmaterial, cmodelMatrix, cm, testTexture);
 	    
+	    
+	    
+	    
 	    Mesh tm = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
 	    Material tMaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
 	    Mat4 tmMat4 = Mat4Transform.scale(10f,1f,10f);
@@ -93,11 +99,10 @@ public class MyGLEventListener implements GLEventListener {
 	    wallMat4 = Mat4.multiply(wallMat4, Mat4Transform.scale(10f,1,10f));
 	    Model wall = new Model(gl, camera, light, shader, wMaterial, wallMat4, wm);
 	    
-	    models = new Model[] {
-	    		cylinder, 
-	    		floor,
-	    		wall
-	    		};
+	    tc = new TestCube(gl);
+	    tc.translate(5f,1f,5f);
+	    tc.scale(2f,2f,2f);
+	    tc.setTexture(testTexture);
 	    
 	}
 	
@@ -108,26 +113,24 @@ public class MyGLEventListener implements GLEventListener {
 	    light.setPosition(getLightPosition());  // changing light position each frame
 	    light.render(gl);
 	    
-	    for(Model model: models) {
-			 model.render(gl);
-		}
+	    tc.rotate(0, 1, 0);
+	    tc.getModel(camera, light).render(gl);
 	}
 	  private Vec3 getLightPosition() {
 		    double elapsedTime = getSeconds()-startTime;
-		    // return
 		    float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50))*Math.sin(Math.toRadians(elapsedTime*50)));
 		    float y = 2.7f;
 		    float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
 		    
-		    return new Vec3(x,y,z);
+//		    return new Vec3(x,y,z);
 		    
-//		    return new Vec3(5f,3.4f,5f);  // use to set in a specific position for testing
+		    return new Vec3(5f,3.4f,5f);  // use to set in a specific position for testing
 		  }
 	  
 
 	  
 	  private void disposeModels(GL3 gl) {
-		for(Model model: models) {
+		for(Model model: static_models) {
 			 model.dispose(gl);
 		}
 	    light.dispose(gl);

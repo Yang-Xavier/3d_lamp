@@ -33,7 +33,6 @@ class MyMouseInput extends MouseMotionAdapter {
 	    float sensitivity = 0.001f;
 	    float dx=(float) (ms.x-lastpoint.x)*sensitivity;
 	    float dy=(float) (ms.y-lastpoint.y)*sensitivity;
-	    //System.out.println("dy,dy: "+dx+","+dy);
 	    if (e.getModifiers()==MouseEvent.BUTTON1_MASK)
 	      camera.updateYawPitch(dx, -dy);
 	    lastpoint = ms;
