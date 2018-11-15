@@ -13,19 +13,16 @@ import com.jogamp.opengl.util.awt.*;
 import basisObj.*;
 
 public class MyGLEventListener implements GLEventListener {
-	
-	private final String TEXTUREBASEPATH = "model_source/texture/";
-	private final String SHADERBASEPATH = "model_source/shader/";
-	
-	String TestTexture = TEXTUREBASEPATH+"brickwall.jpg";
+		
+	String TestTexture = Constant.TEXTURE_BASEPATH+"brickwall.jpg";
 
 	// scene model
 	private Camera camera;
 	
 	public MyGLEventListener(Camera camera) {
 	    this.camera = camera;
-	    this.camera.setPosition(new Vec3(4f,6f,15f));
-	    this.camera.setTarget(new Vec3(0f,5f,0f));
+	    this.camera.setPosition(Constant.DEFAULT_CAMERA_POSITION);
+	    this.camera.setTarget(Constant.DEFAULT_CAMERA_TRAGET);
 	  }
 	
 	@Override
@@ -44,7 +41,7 @@ public class MyGLEventListener implements GLEventListener {
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
-		// TODO Auto-generated method stub
+//		createRandomNumbers();
 	    GL3 gl = drawable.getGL().getGL3();
 	    System.out.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
 	    gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); 
@@ -55,7 +52,7 @@ public class MyGLEventListener implements GLEventListener {
 	    gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
 	    gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
 	    initialise(gl);
-//	    startTime = getSeconds();
+	    startTime = getSeconds();
 	}
 
 	@Override
@@ -67,33 +64,40 @@ public class MyGLEventListener implements GLEventListener {
 	    camera.setPerspectiveMatrix(Mat4Transform.perspective(45, aspect));
 	}
 	
-	  
-	
 	Light light;
 	Model[] models;
 	public void initialise(GL3 gl) {
-		
 		int[] testTexture = TextureLibrary.loadTexture(gl, TestTexture);
 		
 		light = new Light(gl);
-		light.setShade(new String[] {SHADERBASEPATH + "vs_light.txt", SHADERBASEPATH + "fs_light.txt"});
+		light.setShade(new String[] {Constant.DEFAULT_LIGHT_VS, Constant.DEFAULT_LIGHT_FS});
 	    light.setCamera(camera);
-	    String[] ps = new String[] {SHADERBASEPATH + "vs_light.txt", SHADERBASEPATH + "fs_light.txt"};
-	    	System.out.println(ps[0]);
-	    	System.out.println(ps[1]);
-	    
-	    
 	    // build model	    
-	    Mesh mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
-	    Shader shader = new Shader(gl, SHADERBASEPATH + "vs_sphere.txt", SHADERBASEPATH + "fs_sphere.txt");
-	    Material material = new Material(new Vec3(0.0f, 0.5f, 0.81f), new Vec3(0.0f, 0.5f, 0.81f), new Vec3(0.3f, 0.3f, 0.3f), 32.0f);
-	    Mat4 modelMatrix = Mat4Transform.scale(2f,2f,2f);
+	    Mesh cm = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
+	    Shader shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
+	    Material cmaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
+	    Mat4 cmodelMatrix = Mat4Transform.scale(2f,2f,2f);
+	    cmodelMatrix = Mat4.multiply(cmodelMatrix, Mat4Transform.translate(0,1f,0));
+	    cmodelMatrix = Mat4.multiply(cmodelMatrix, Mat4Transform.rotateAroundZ((float) 50));
+	    Model cylinder = new Model(gl, camera, light, shader, cmaterial, cmodelMatrix, cm, testTexture);
 	    
-	    modelMatrix = Mat4.multiply(modelMatrix, Mat4Transform.translate(0,1f,0));
-	    modelMatrix = Mat4.multiply(modelMatrix, Mat4Transform.rotateAroundZ((float) 50));
-	    Model cylinder = new Model(gl, camera, light, shader, material, modelMatrix, mesh, testTexture);
-	
-	    models = new Model[] {cylinder};
+	    Mesh tm = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+	    Material tMaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
+	    Mat4 tmMat4 = Mat4Transform.scale(10f,1f,10f);
+	    Model floor = new Model(gl, camera, light, shader, tMaterial, tmMat4, tm);
+	    
+	    Mesh wm = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+	    Material wMaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
+	    Mat4 wallMat4 = Mat4Transform.rotateAroundX(90);
+	    wallMat4 = Mat4.multiply(wallMat4, Mat4Transform.translate(0,-5f,-5f));
+	    wallMat4 = Mat4.multiply(wallMat4, Mat4Transform.scale(10f,1,10f));
+	    Model wall = new Model(gl, camera, light, shader, wMaterial, wallMat4, wm);
+	    
+	    models = new Model[] {
+	    		cylinder, 
+	    		floor,
+	    		wall
+	    		};
 	    
 	}
 	
@@ -104,35 +108,44 @@ public class MyGLEventListener implements GLEventListener {
 	    light.setPosition(getLightPosition());  // changing light position each frame
 	    light.render(gl);
 	    
-	    
 	    for(Model model: models) {
 			 model.render(gl);
 		}
 	}
-	
 	  private Vec3 getLightPosition() {
 		    double elapsedTime = getSeconds()-startTime;
-		    float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
+		    // return
+		    float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50))*Math.sin(Math.toRadians(elapsedTime*50)));
 		    float y = 2.7f;
 		    float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
 		    
-//		    return new Vec3(x,y,z);
+		    return new Vec3(x,y,z);
 		    
-		    return new Vec3(5f,3.4f,5f);  // use to set in a specific position for testing
+//		    return new Vec3(5f,3.4f,5f);  // use to set in a specific position for testing
 		  }
 	  
-	  private double startTime;
-	private double getSeconds() {
-		    return System.currentTimeMillis()/1000.0;
-		  }
+
 	  
-	private void disposeModels(GL3 gl) {
-		
+	  private void disposeModels(GL3 gl) {
 		for(Model model: models) {
 			 model.dispose(gl);
 		}
 	    light.dispose(gl);
 	  }
-	
+	  
+	  private double startTime;
+	  private double getSeconds() {
+		    return System.currentTimeMillis()/1000.0;
+		  }
+	  
+//	  private int NUM_RANDOMS = 1000;
+//	  private float[] randoms;
+//	  private void createRandomNumbers() {
+//		    randoms = new float[NUM_RANDOMS];
+//		    for (int i=0; i<NUM_RANDOMS; ++i) {
+//		      randoms[i] = (float)Math.random();
+//		    }
+//		  }
+	  
 }
 //MyGLEventListener

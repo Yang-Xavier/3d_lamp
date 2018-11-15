@@ -7,7 +7,7 @@ public static void main(String[] args) {
 	float[] vec = Cylinder.vertices.clone();
 	int[] index = Cylinder.indices.clone();
 
-	float[] svec = Sphere.vertice.clone();
+	float[] svec = Sphere.vertices.clone();
 	int[] sindex = Sphere.indices.clone();
 //	for(int i=0; i< vec.length; i++) {
 //		if(i%8==0) {

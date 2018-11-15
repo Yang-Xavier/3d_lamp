@@ -46,7 +46,7 @@ public class Sphere {
 		    return indices;
 	  }
 	  
-		public static final float[] vertice = createVertices();	  
+		public static final float[] vertices = createVertices();	  
 		public static final int[] indices = createIndices();
 		  
 }

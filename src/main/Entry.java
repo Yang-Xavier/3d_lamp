@@ -93,7 +93,7 @@ public class Entry extends JFrame {
 		    animator.start();
 		  }
 	  public static void main(String[] args) {
-		    Entry e1 = new Entry("M01");
+		    Entry e1 = new Entry("Lamp");
 		    e1.getContentPane().setPreferredSize(dimension);
 		    e1.pack();
 		    e1.setVisible(true);
