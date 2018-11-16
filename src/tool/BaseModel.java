@@ -1,4 +1,4 @@
-package test;
+package tool;
 
 import com.jogamp.opengl.GL3;
 
@@ -14,22 +14,16 @@ import tool.Model;
 import tool.Shader;
 import tool.TextureLibrary;
 
-public class TestCube {
-	Mesh mesh;
-	Shader shader;
-	Material material;
-	Mat4 transformMat;
-	GL3 gl;
-	int[] texture;
-	
-	public TestCube(GL3 gl) {
-//		this.mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
-//		this.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
-//		this.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-//		Mat4 modelMatrix = Mat4Transform.scale(1f,1f,1f);
-//	    modelMatrix = Mat4.multiply(modelMatrix, Mat4Transform.translate(0,0f,0));
-//	    this.transformMat = modelMatrix;
-	}
+public class BaseModel {
+	public Mesh mesh;
+	public Shader shader;
+	public Material material;
+	public Mat4 transformMat;
+	public GL3 gl;
+	public Model model;
+	public int[] texture;
+
+	public BaseModel(GL3 gl) {}
 	
 	public void setTexture( int[] texture) {
 		this.texture = texture;
@@ -68,7 +62,17 @@ public class TestCube {
 	}
 	
 	public Model getModel(Camera camera,Light light) {
-		return new Model(gl, camera, light, shader, material, transformMat, mesh, texture);
+		model = new Model(gl, camera, light, shader, material, transformMat, mesh, texture);
+		return model;
 	}
 	
+	public Model render(Camera camera,Light light, GL3 gl) {
+		model = new Model(gl, camera, light, shader, material, transformMat, mesh, texture);
+		model.render(gl);
+		return model;
+	}
+	
+	public void dispose(GL3 gl) {
+		this.model.dispose(gl);
+	}
 }

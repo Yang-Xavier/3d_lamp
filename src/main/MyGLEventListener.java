@@ -1,6 +1,8 @@
 package main;
 
 import gmaths.*;
+import lamp.Foundation;
+import lamp.Lamp;
 import scene.*;
 import test.TestCube;
 import tool.*;
@@ -17,10 +19,11 @@ public class MyGLEventListener implements GLEventListener {
 		
 	String TestTexture = Constant.TEXTURE_BASEPATH+"brickwall.jpg";
 	Light light;
-	Model[] static_models;
-	TestCube tc;
-
-	// scene model
+// model
+	Space space;
+	Desk desk;
+	Lamp lamp;
+// scene model
 	private Camera camera;
 	
 	public MyGLEventListener(Camera camera) {
@@ -53,8 +56,8 @@ public class MyGLEventListener implements GLEventListener {
 	    gl.glEnable(GL.GL_DEPTH_TEST);	// render the foremost object
 	    gl.glDepthFunc(GL.GL_LESS);	
 	    gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
-	    gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
-	    gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
+//	    gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
+//	    gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
 	    initialise(gl);
 	    startTime = getSeconds();
 	}
@@ -76,34 +79,10 @@ public class MyGLEventListener implements GLEventListener {
 		light.setShade(new String[] {Constant.DEFAULT_LIGHT_VS, Constant.DEFAULT_LIGHT_FS});
 	    light.setCamera(camera);
 	    // build model	    
-	    Mesh cm = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
-	    Shader shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
-	    Material cmaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-	    Mat4 cmodelMatrix = Mat4Transform.scale(2f,2f,2f);
-	    cmodelMatrix = Mat4.multiply(cmodelMatrix, Mat4Transform.translate(0,1f,0));
-	    cmodelMatrix = Mat4.multiply(cmodelMatrix, Mat4Transform.rotateAroundZ((float) 50));
-	    Model cylinder = new Model(gl, camera, light, shader, cmaterial, cmodelMatrix, cm, testTexture);
 	    
-	    
-	    
-	    
-	    Mesh tm = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
-	    Material tMaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-	    Mat4 tmMat4 = Mat4Transform.scale(10f,1f,10f);
-	    Model floor = new Model(gl, camera, light, shader, tMaterial, tmMat4, tm);
-	    
-	    Mesh wm = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
-	    Material wMaterial = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-	    Mat4 wallMat4 = Mat4Transform.rotateAroundX(90);
-	    wallMat4 = Mat4.multiply(wallMat4, Mat4Transform.translate(0,-5f,-5f));
-	    wallMat4 = Mat4.multiply(wallMat4, Mat4Transform.scale(10f,1,10f));
-	    Model wall = new Model(gl, camera, light, shader, wMaterial, wallMat4, wm);
-	    
-	    tc = new TestCube(gl);
-	    tc.translate(5f,1f,5f);
-	    tc.scale(2f,2f,2f);
-	    tc.setTexture(testTexture);
-	    
+	    space  = new Space(gl);
+	    desk = new Desk(gl);
+	    lamp = new Lamp(gl);
 	}
 	
 	// it could be rewrite in render a model array
@@ -113,8 +92,11 @@ public class MyGLEventListener implements GLEventListener {
 	    light.setPosition(getLightPosition());  // changing light position each frame
 	    light.render(gl);
 	    
-	    tc.rotate(0, 1, 0);
-	    tc.getModel(camera, light).render(gl);
+	    space.render(camera, light, gl);
+	    desk.render(camera, light, gl);
+	    lamp.render(camera, light, gl);
+	    
+	    
 	}
 	  private Vec3 getLightPosition() {
 		    double elapsedTime = getSeconds()-startTime;
@@ -130,10 +112,10 @@ public class MyGLEventListener implements GLEventListener {
 
 	  
 	  private void disposeModels(GL3 gl) {
-		for(Model model: static_models) {
-			 model.dispose(gl);
-		}
 	    light.dispose(gl);
+	    space.dispose(gl);
+	    desk.dispose(gl);
+	    lamp.dispose(gl);
 	  }
 	  
 	  private double startTime;

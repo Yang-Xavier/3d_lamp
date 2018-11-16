@@ -4,36 +4,13 @@ import basisObj.*;
 
 public class TestObj {
 public static void main(String[] args) {
-	float[] vec = Cylinder.vertices.clone();
-	int[] index = Cylinder.indices.clone();
-
-	float[] svec = Sphere.vertices.clone();
-	int[] sindex = Sphere.indices.clone();
-//	for(int i=0; i< vec.length; i++) {
-//		if(i%8==0) {
-//			System.out.println((i/8)+"__:__");
-//		}
-//		System.out.println(vec[i]);
-//	}
+	float[] vec = Cone.vertices.clone();
+	int[] index = Cone.indices.clone();
 	
-	print(0, svec, 8);
-	print(1, svec, 8);
-	print(37, svec, 8);
-	print(36, svec, 8);
-//	print(92, svec, 8);
-//	print(93, svec, 8);
-	
-//
-//	for(int i=0; i< sindex.length; i++) {
-//		System.out.println(sindex[i]);
-//	}
-//	System.out.println(index.length);
-	print(62, index, 3);
-	print(63, index, 3);
-//	print(92, index, 3);
-//	print(63, index, 3);
-//	print(92, index, 3);
-//	print(93, index, 3);
+	print(vec);
+//	print(190, vec, 8);
+//	System.out.println(index.length/3);
+//	print(index);
 
 }
 
@@ -51,4 +28,23 @@ public static void print(int index, int[] a,int step) {
 	}
 	System.out.println();
 }
+public static void print(int[] a) {
+	for (int i = 0; i < a.length; i+=3) {
+		for (int j = 0; j < 3; j++) {
+			System.out.printf(a[i+j]+"===");
+		}
+		System.out.println();
+	}
+}
+
+public static void print(float[] a) {
+	for (int i = 0; i < a.length; i+=8) {
+		for (int j = 0; j < 8; j++) {
+			System.out.printf(a[i+j]+"===");
+		}
+		System.out.println();
+	}
+}
+
+
 }
