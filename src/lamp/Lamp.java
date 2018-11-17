@@ -8,10 +8,12 @@ import scene.Light;
 public class Lamp{
 	
 	Foundation foundation;
+	
 	GL3 gl;
 	public Lamp(GL3 gl) {
 		this.gl = gl;
 		foundation = new Foundation(gl);
+		
 		
 	}
 	

@@ -2,12 +2,14 @@ package tool;
 
 import com.jogamp.opengl.GL3;
 
+import gmaths.Vec3;
 import scene.Camera;
 import scene.Light;
 
 public class ModelContainer {
 	public BaseModel[] baseModels;
 	GL3 gl;
+	Vec3 basePoint;
 	
 	public ModelContainer(GL3 gl) {
 		this.gl = gl;
