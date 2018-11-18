@@ -50,9 +50,7 @@ public class Foundation extends ModelContainer{
 		
 		joint.setTexture(test_texture);
 		joint.translate(relativePosition(0,0.7f,0));
-		joint.scale(0.3f, 0.3f, 0.3f);
 	}
-	
 }
 
 class FoundationBottom extends BaseModel{
@@ -70,6 +68,7 @@ class Joint extends BaseModel{
 		super.mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
+		scale(0.3f, 0.3f, 0.3f);
 	}
 }
 
