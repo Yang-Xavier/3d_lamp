@@ -32,11 +32,18 @@ public class Space extends ModelContainer{
 		windowWall = new WindowWall(gl);
 //		topWall = new TopWall(gl);
 		
+		baseModels = new BaseModel[3];
+		baseModels[0] = floor;
+		baseModels[1] = leftWall;
+		baseModels[2] = windowWall;
+	}
+	
+	@Override
+	public void initial() {
+		super.initial();
 		floor.setTexture(floor_texture);
 		leftWall.setTexture( wall_texture);
 		windowWall.setTexture( wall_texture);
-//		topWall.setTexture(wall_texture);
-		
 		
 		floor.translate(0, 0, 0);
 		leftWall.translate(-10f, 10f, 0f);
@@ -49,12 +56,6 @@ public class Space extends ModelContainer{
 		floor.scale(20,10,20);
 		leftWall.scale(20,10,20);
 		windowWall.scale(20,10,20);
-		
-		// parent
-		baseModels = new BaseModel[3];
-		baseModels[0] = floor;
-		baseModels[1] = leftWall;
-		baseModels[2] = windowWall;
 	}
 }
 
@@ -71,7 +72,6 @@ class Floor extends BaseModel{
 			super.mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
 			super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 			super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-			super.transformMat = new Mat4(1);
 		}
 }
 
@@ -81,7 +81,6 @@ class LeftWall extends BaseModel{
 			super.mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
 			super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 			super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-			super.transformMat = new Mat4(1);
 		}
 }
 
@@ -91,7 +90,6 @@ class WindowWall extends BaseModel{
 			super.mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
 			super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 			super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-			super.transformMat = new Mat4(1);
 	}
 }
 
@@ -101,7 +99,6 @@ class TopWall extends BaseModel{
 			super.mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
 			super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 			super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-			super.transformMat = new Mat4(1);
 	}
 }
 

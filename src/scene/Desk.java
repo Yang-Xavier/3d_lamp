@@ -57,7 +57,6 @@ class Leg extends BaseModel {
 		super.mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-		super.transformMat = new Mat4(1);
 	}
 }
 
@@ -67,6 +66,5 @@ class DeskPlatform extends BaseModel {
 		super.mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-		super.transformMat = new Mat4(1);
 	}
 }

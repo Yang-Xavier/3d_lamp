@@ -83,6 +83,10 @@ public class MyGLEventListener implements GLEventListener {
 	    space  = new Space(gl);
 	    desk = new Desk(gl);
 	    lamp = new Lamp(gl);
+	    
+	    space.initial();
+	    desk.initial();
+	    lamp.initial();
 	}
 	
 	// it could be rewrite in render a model array
