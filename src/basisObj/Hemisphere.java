@@ -72,7 +72,7 @@ public class Hemisphere {
 		    }
 		 // Hemi body
 		    
-		    int pointBase= (XZCSTEP-1)*(YSTEP-1);
+		    int pointBase= (XZCSTEP-1)*(YSTEP-1)+1;
 		    for(int i = 0; i < XZCSTEP; i++) {
 				indices[base + 0] = pointBase;
 				indices[base + 1] = pointBase + (i+1);
