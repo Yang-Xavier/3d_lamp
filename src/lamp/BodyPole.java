@@ -24,11 +24,11 @@ public class BodyPole extends ModelContainer{
 		joint = new Joint(gl);
 		pole2 = new Pole(gl);
 		
-		baseModels = new BaseModel[3];
-		baseModels[0] = pole1;
-		baseModels[1] = pole2;
-		baseModels[2] = joint;
-	}
+
+		baseModels.add(pole1);
+		baseModels.add(pole2);
+		baseModels.add(joint);
+}
 	
 	@Override
 	public void initial() {

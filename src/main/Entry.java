@@ -73,6 +73,8 @@ public class Entry extends JFrame {
 	  public Entry(String textForTitleBar) {
 		    super(textForTitleBar);
 		    GLCapabilities glcapabilities = new GLCapabilities(GLProfile.get(GLProfile.GL3));
+		    glcapabilities.setSampleBuffers(true); 
+		    glcapabilities.setNumSamples(4);
 		    canvas = new GLCanvas(glcapabilities);
 		    Camera camera = new Camera(Camera.DEFAULT_POSITION, Camera.DEFAULT_TARGET, Camera.DEFAULT_UP);
 		    glEventListener = new MyGLEventListener(camera);

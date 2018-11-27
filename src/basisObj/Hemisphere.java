@@ -37,6 +37,7 @@ public class Hemisphere {
 			vertices[base + 6] = (float) 0.5;
 			vertices[base + 7] = (float) 0.5;
 			//bottom center point
+			
 			double theta,x,y,z;
 			for(int i = 0; i < XZCSTEP; i++ ) {
 				theta = Math.toRadians(360*(double)(i)/(XZCSTEP-1));
@@ -57,30 +58,51 @@ public class Hemisphere {
 		  }
 	  
 	  private static int[] createIndices() {
-		    int[] indices = new int[(XZCSTEP-1)*(YSTEP-1)*6+30*3];
-		    int base = 0;
-		    for (int j = 0; j<YSTEP-1; ++j) {
-		      for (int i = 0; i<YSTEP-1; ++i) {
-		        indices[base +0] = j*XZCSTEP+i;
-		        indices[base +1] = j*XZCSTEP+i+1;
-		        indices[base +2] = (j+1)*XZCSTEP+i+1;
-		        indices[base +3] = j*XZCSTEP+i;
-		        indices[base +4] = (j+1)*XZCSTEP+i+1;
-		        indices[base +5] = (j+1)*XZCSTEP+i;
-		        base+=6;
-		      }
-		    }
+		    int[] indices = new int[(XZCSTEP)*(YSTEP-1)*6];
+//		    int[] indices = new int[(XZCSTEP)*(YSTEP-1)*6+30*3];
+		    int step = 3;
+			int base = 0;
+			int point_base = 0;
+//		    for (int j = 0; j<YSTEP-1; ++j) {
+//		      for (int i = 0; i<YSTEP-1; ++i) {
+//		        indices[base +0] = j*XZCSTEP+i;
+//		        indices[base +1] = j*XZCSTEP+i+1;
+//		        indices[base +2] = (j+1)*XZCSTEP+i+1;
+//		        indices[base +3] = j*XZCSTEP+i;
+//		        indices[base +4] = (j+1)*XZCSTEP+i+1;
+//		        indices[base +5] = (j+1)*XZCSTEP+i;
+//		        base+=6;
+//		      }
+//		    }
+			
+			for( int i = 0; i < YSTEP-1; i++) {
+				for(int j = 0; j < XZCSTEP; j++) {
+					indices[base + 0] = point_base + j;
+					if(j<XZCSTEP-1) {indices[base + 1] = point_base + j + 1;}
+					else 				  {indices[base + 1] = point_base + 1;}
+					indices[base + 2] = point_base + XZCSTEP  + j;
+					base += step;
+					
+					indices[base + 0] = point_base + XZCSTEP  + j;
+					indices[base + 1] = point_base + j+1;
+					if(j<XZCSTEP-1) {indices[base + 2] = point_base + XZCSTEP  + j + 1;}
+					else				      {indices[base + 2] = point_base + XZCSTEP  + 1;}
+					
+					base += step;
+				}
+				point_base += XZCSTEP;
+			}
 		 // Hemi body
 		    
-		    int pointBase= (XZCSTEP-1)*(YSTEP-1)+1;
-		    for(int i = 0; i < XZCSTEP; i++) {
-				indices[base + 0] = pointBase;
-				indices[base + 1] = pointBase + (i+1);
-				if (i< XZCSTEP-1)	{indices[base + 2] = pointBase + (i+2);}
-				else 					{ indices[base + 2] = pointBase + 1;}
-				base += 3;
-			}
-		 // Hemi bottom
+//		    int pointBase= (XZCSTEP-1)*(YSTEP-1)+1;
+//		    for(int i = 0; i < XZCSTEP; i++) {
+//				indices[base + 0] = pointBase;
+//				indices[base + 1] = pointBase + (i+1);
+//				if (i< XZCSTEP-1)	{indices[base + 2] = pointBase + (i+2);}
+//				else 					{ indices[base + 2] = pointBase + 1;}
+//				base += 3;
+//			}
+//		 // Hemi bottom
 		    return indices;
 	  }
 	  

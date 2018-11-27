@@ -32,10 +32,9 @@ public class Space extends ModelContainer{
 		windowWall = new WindowWall(gl);
 //		topWall = new TopWall(gl);
 		
-		baseModels = new BaseModel[3];
-		baseModels[0] = floor;
-		baseModels[1] = leftWall;
-		baseModels[2] = windowWall;
+		baseModels.add(floor);
+		baseModels.add(leftWall);
+		baseModels.add(windowWall);
 	}
 	
 	@Override

@@ -30,16 +30,16 @@ public class Foundation extends ModelContainer{
 		joint = new Joint(gl);
 		foundationBottomCone = new FoundationBottomCone(gl);
 		
-		baseModels = new BaseModel[3];
-		baseModels[0] = foundationBottom;
-		baseModels[1] = joint;
-		baseModels[2] = foundationBottomCone;
+		baseModels.add(foundationBottom);
+		baseModels.add(joint);
+		baseModels.add(foundationBottomCone);
 	}
 	
 	@Override
 	public void initial() {
 		// TODO Auto-generated method stub
 		super.initial();
+
 		foundationBottom.setTexture(test_texture);
 		foundationBottom.translate(relativePosition(0,0.3f,0));
 		foundationBottom.scale(1.2f, 0.15f, 1.2f);
@@ -50,6 +50,18 @@ public class Foundation extends ModelContainer{
 		
 		joint.setTexture(test_texture);
 		joint.translate(relativePosition(0,0.7f,0));
+	}
+	
+	@Override
+	public void render(Camera camera, Light light, GL3 gl) {
+		// TODO Auto-generated method stub
+//		System.out.println(foundationBottom.position);
+		
+//		foundationBottom.translate(relativePosition(0,0.3f,0));
+//		foundationBottomCone.translate(relativePosition(0,0.45f,0));
+//		joint.translate(relativePosition(0,0.7f,0));
+		
+		super.render(camera, light, gl);
 	}
 }
 

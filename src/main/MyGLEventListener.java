@@ -56,6 +56,7 @@ public class MyGLEventListener implements GLEventListener {
 	    gl.glEnable(GL.GL_DEPTH_TEST);	// render the foremost object
 	    gl.glDepthFunc(GL.GL_LESS);	
 	    gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
+	    gl.glEnable(GL.GL_MULTISAMPLE);  // anti-Aliasing
 //	    gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
 //	    gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
 	    initialise(gl);
@@ -71,7 +72,6 @@ public class MyGLEventListener implements GLEventListener {
 	    camera.setPerspectiveMatrix(Mat4Transform.perspective(45, aspect));
 	}
 	
-
 	public void initialise(GL3 gl) {
 		int[] testTexture = TextureLibrary.loadTexture(gl, TestTexture);
 		
@@ -98,9 +98,8 @@ public class MyGLEventListener implements GLEventListener {
 	    
 	    space.render(camera, light, gl);
 	    desk.render(camera, light, gl);
-	    lamp.render(camera, light, gl);
 	    
-	    
+	    lamp.update(camera, light, gl);
 	}
 	  private Vec3 getLightPosition() {
 		    double elapsedTime = getSeconds()-startTime;

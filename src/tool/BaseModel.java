@@ -54,12 +54,6 @@ public class BaseModel {
 		this.scale(s, s, s);
 	}
 	
-//	public void rotate(float rx, float ry, float rz, boolean around_origin) {
-//		Mat4 rotateMat =  Mat4Transform.rotateAroundX(rx);
-//		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundY(ry));
-//		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundZ(rz));
-//	}
-	
 	public void rotate(float rx, float ry, float rz) {
 		Mat4 rotateMat =  Mat4Transform.rotateAroundX(rx);
 		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundY(ry));

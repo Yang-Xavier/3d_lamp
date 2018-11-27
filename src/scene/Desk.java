@@ -42,12 +42,11 @@ public class Desk extends ModelContainer{
 		l4.scale(0.5f, 5f,0.5f);
 		deskPlatform.scale(15f,0.5f,6f);
 		
-		baseModels = new BaseModel[5];
-		baseModels[0] = l1;
-		baseModels[1] = l2;
-		baseModels[2] = l3;
-		baseModels[3] = l4;
-		baseModels[4] = deskPlatform;
+		baseModels.add(l1);
+		baseModels.add(l2);
+		baseModels.add(l3);
+		baseModels.add(l4);
+		baseModels.add(deskPlatform);
 	}
 }
 
