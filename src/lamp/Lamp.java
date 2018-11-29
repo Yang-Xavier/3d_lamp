@@ -47,32 +47,21 @@ public class Lamp extends NodeContainer{
 	public Lamp(GL3 gl) {
 		super(gl, "lamp");
 		this.gl = gl;
-		
-		
 		foundation = new FoundationNode(gl);
 		bodyPole = new BodyPoleNode(gl);
 		head = new HeaderNode(gl);
-		
 		bodyPole.pole_length = pole_length;
-	
-		
 		this.addChild(foundation);
 		foundation.addToLast(bodyPole);
 		bodyPole.addToLast(head);
 	}
 	
 	public void update(Camera camera,Light light) {
-
-//		foundationTransform = Mat4.multiply(foundationTransform, Mat4Transform.rotateAroundY(theta));
-		
 		bodyPole.degree = pole_drgree;
 		head.pole_drgree = pole_drgree;
 		head.shade_degree = 90f;
 		
-
-		if( x > 10f && h == 0f) {
-			turning();
-		} else {
+		if (jump) {
 			move();
 		}
 		
@@ -80,25 +69,64 @@ public class Lamp extends NodeContainer{
 	}
 	
 	
-	float vx = 0.02f;
-	float o_vh = 0.05f;
-	float g = 0.001f;
-	float vh = o_vh;
-	float h = 0;
-	float x = 0;
-	private void move() {
-		h+=vh;
-		vh-=g;
-		x+=vx;
+	private boolean jump  = true;
+	public void randomJump() {
+		initJumpParameter();
+		jump  = true;
+	}
+	
+	public void jumpDone() {
+//		jump  = false;
+		flag = true;
 		moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
-		if (h<=0) {
-			h = 0;
-			vh = o_vh;
+		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
+	}
+	
+	private float distance,vx,vh,h,x,g;
+	private void initJumpParameter() {
+		distance = getRandomDistance();
+		vx = 0.1f;
+		g = 0.005f;
+		vh = (distance*g/vx)/2f;
+		h = 0;
+		System.out.println(distance+" " + vx + " " + vh + " " + x +" "  + should_turning );
+	}
+	
+	boolean flag = true;
+	private void move() {
+		if (flag) {
+			initJumpParameter();
+			flag = false;
+		}
+		if (!should_turning) {
+			vh-=g;
+			x+=vx;
+			h+=vh;
+			if(x>=10) {
+				x =10;
+			}
+			moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
+			if (h<=0) {
+				h=0;
+				jumpDone();
+				if(x ==10) {
+					should_turning = true;
+				}
+			}
+		} else {
+			turning();
 		}
 	}
 	
+	
+	private void moveTransition() {
+		
+	}
+	
+	
 	private float turn_angel = 0;
 	private boolean turning_dirct = true; //true: clockwist, false:anti-clockwist
+	private boolean should_turning = false;
 	private void turning() {
 		moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,0,0)));
 		moveTransform = Mat4.multiply(moveTransform, Mat4Transform.rotateAroundY(turn_angel));
@@ -107,24 +135,39 @@ public class Lamp extends NodeContainer{
 			if(turn_angel <-180) {
 				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,0,0)));
 				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundY(-180));
-				x = 0;
-				vh = o_vh;
 				turn_angel = 0;
 				turning_dirct = !turning_dirct;
+				should_turning = false;
+				x = 0;
 			}
 		} else {
 			if(turn_angel >180) {
 				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,0,0)));
 				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundY(180));
-				x = 0;
-				vh = o_vh;
 				turn_angel = 0;
 				turning_dirct = !turning_dirct;
+				should_turning = false;
+				x = 0;
 			}
 		}
-		
 	}
 	
+	private float getRandomDistance() {
+		
+		float randomDis = (float) Math.random()*5+2;
+//		if(10-x<=4f) {
+//			if (10-x>=2f) {
+//				randomDis = 10-x;
+//			} else {
+//				randomDis = (float) Math.random()*x;
+//				x = 10-x;
+//				should_turning = true;
+//			}
+//		} else if (x+randomDis>10) {
+//			randomDis = (float) Math.random()*(8-x)+2;
+//		}
+		return randomDis;
+	}
 	
 	private double startTime=getSeconds();
 	
