@@ -50,16 +50,18 @@ public class BaseModel {
 		this.scale = Mat4.multiply(this.scale, Mat4Transform.scale(x, y, z));
 	}
 	
-	public void scale(float s) {
-		this.scale(s, s, s);
-	}
-	
 	public void rotate(float rx, float ry, float rz) {
 		Mat4 rotateMat =  Mat4Transform.rotateAroundX(rx);
 		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundY(ry));
 		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundZ(rz));
 		this.rotate = Mat4.multiply(this.rotate, rotateMat);
 	}
+	
+	public void scale(float s) {
+		this.scale(s, s, s);
+	}
+	
+
 	
 	public void rotate(int rx, int ry, int rz) {
 		this.rotate((float)rx, (float)ry, (float)rz);

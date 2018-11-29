@@ -1,7 +1,6 @@
 package main;
 
 import gmaths.*;
-import lamp.Foundation;
 import lamp.Lamp;
 import scene.*;
 import test.TestCube;
@@ -86,7 +85,7 @@ public class MyGLEventListener implements GLEventListener {
 	    
 	    space.initial();
 	    desk.initial();
-	    lamp.initial();
+//	    lamp.initial();
 	}
 	
 	// it could be rewrite in render a model array
@@ -99,8 +98,14 @@ public class MyGLEventListener implements GLEventListener {
 	    space.render(camera, light, gl);
 	    desk.render(camera, light, gl);
 	    
-	    lamp.update(camera, light, gl);
+	    updateLamp();
+	    lamp.render(camera, light);
 	}
+	
+	public void updateLamp() {
+		lamp.update(camera, light);
+	}
+	
 	  private Vec3 getLightPosition() {
 		    double elapsedTime = getSeconds()-startTime;
 		    float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50))*Math.sin(Math.toRadians(elapsedTime*50)));
