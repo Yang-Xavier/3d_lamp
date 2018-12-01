@@ -29,7 +29,7 @@ public class Lamp extends NodeContainer{
 	
 	Vec3 baseAxis = new Vec3(0f, 5f, -7f);	// table platform
 	
-	Vec3 basisSurface = new Vec3(-5f, 5.35f, -7f);	// basis for lamp
+	Vec3 basisSurface = new Vec3(0f, 5.35f, -7f);	// basis position for lamp
 	Mat4 basisTransform = Mat4Transform.translate(basisSurface); // initial position and status 
 	Mat4 moveTransform = new Mat4(1);		// status for each action
 	
@@ -42,7 +42,10 @@ public class Lamp extends NodeContainer{
 	float init_pole_degree = 60;
 	float pole_degree = init_pole_degree; 
 
-	float shade_degree = 60;		// the angle for the shade
+//	float min_shade_degree = 10; 	// the angle for the shade
+//	float max_shade_degree = 120;
+	float init_shade_degree = 60;
+	float shade_degree = init_shade_degree; 
 	
 	GL3 gl;
 	List<ModelContainer> modelContainers;
@@ -61,17 +64,14 @@ public class Lamp extends NodeContainer{
 	
 	public void update(Camera camera,Light light) {
 		bodyPole.degree = pole_degree;
-		head.pole_drgree = shade_degree;
-		head.shade_degree = 90f;
-		
+		head.pole_drgree = pole_degree;
+		head.shade_degree = shade_degree;
+		head.y_degree = shade_shake_degree;
 		if (jump) {
 			move();
 		}
-		
 		super.update(Mat4.multiply(basisTransform, moveTransform), camera, light);
 	}
-	
-	
 	private boolean jump  = true;
 	
 	public void randomJump() {
@@ -81,13 +81,12 @@ public class Lamp extends NodeContainer{
 	
 	public void jumpDone() {
 		jump  = false;
-//		moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
-//		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
 	}
 	
 	private float distance,hori_v,v_v,h,x=0,y=0,g,turning_angle,forward, count_angle = 0, max_random, min_random;
 	private float compress_scale, compress_degree,final_compress_degree, a_degree,v_degree;
-	private float[] X= {0,10}, Y = {-2,2};	// limitation of the surface
+	private float shade_shake_degree; int shade_shake_times;
+	private float[] X= {-4,4}, Y = {-2,2};	// limitation of the surface
 	
 	private boolean turning_dirct; //true: clockwist, false:anti-clockwist
 	private float turning_step = 0;
@@ -108,31 +107,68 @@ public class Lamp extends NodeContainer{
 		turning_step = turning_angle/40;		// angle for turning each time
 		forward = turning_dirct? -turning_angle:turning_angle;	//	turning direction
 		is_turning = true;		// a switch for turning 
+		is_looking = true;
+		recover = true;
 		count_angle+=forward;	// accumulation angle
 		
 		// initialise the transition
-		compress_scale = (max_pole_degree-min_pole_degree)/max_random;
-		compress_degree = compress_scale*distance;
-		final_compress_degree = max_pole_degree-compress_degree;
-		recover = false;
+		compress_scale = (max_pole_degree-min_pole_degree)/max_random; // the angle scale of the poles before jump
+		compress_degree = compress_scale*distance;	//  the angle  of the poles before jump
+		final_compress_degree = max_pole_degree-compress_degree; //  the final angle scale of the poles in jumping
 		v_degree = 4;
 		a_degree = 0.04f;
+		
+		shade_shake_degree = 0f;
+		shade_shake_times = 2;
 	}
 	
-	private float basis_angel = 0;
+//	private float basis_angel = 0;
 	private float turning_ = 0;
+	private boolean is_looking = true;
+	private int times_of_shake = 0;
+	private float increase = 2;
 	private void turning() {
-		if(turning_+turning_step>=turning_angle) { // final step for rotating
-			turning_ = turning_angle;
-			is_turning = false;
-			is_transition = true;
-			moveTransform = new Mat4(1);
-			transformBasis(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_angle: turning_angle,0));
-			turning_= 0;
+		if(is_looking) {
+			if (shade_shake_degree>=60) {
+				shade_shake_degree = 60;
+				times_of_shake ++;
+				increase = -increase;
+				
+				startTime = getSeconds();
+				while ((getSeconds()-startTime)<0.3) {}
+			}else {
+				shade_shake_degree+=increase;
+			} 
+			if(shade_shake_degree<= -60){
+				shade_shake_degree= -60;
+				times_of_shake ++;
+				increase = -increase;
+				startTime = getSeconds();
+				while ((getSeconds()-startTime)<0.3) {}
+			}  else {
+				shade_shake_degree+=increase;
+			}
+			if (shade_shake_degree*(shade_shake_degree+increase)<=0 && times_of_shake==shade_shake_times) {
+				shade_shake_degree = 0;
+				times_of_shake = 0;
+				shade_shake_times = 2;
+				is_looking = false;
+				recover = false;
+			}
 		} else {
-			turning_ += turning_step;
-			transformMoving(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_step: turning_step,0));
+			if(turning_+turning_step>=turning_angle) { // final step for rotating
+				turning_ = turning_angle;
+				is_turning = false;
+				is_transition = true;
+				moveTransform = new Mat4(1);
+				transformBasis(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_angle: turning_angle,0));
+				turning_= 0;
+			} else {
+				turning_ += turning_step;
+				transformMoving(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_step: turning_step,0));
+			}
 		}
+		
 	}
 	
 	private boolean recover = false;
@@ -159,6 +195,7 @@ public class Lamp extends NodeContainer{
 				}
 			}
 		}
+		
 	}
 	
 	private float lamp_theta = 0;
@@ -191,18 +228,22 @@ public class Lamp extends NodeContainer{
 			horizontal_step = 0;
 			is_jumping = false;
 			is_stop_jumping_transition = true;
-			v_degree = 8;
-			a_degree = 0.08f;
+			v_degree = 4;
+			a_degree = 0.04f;
 		} else {
 			h+=v_v;
 			v_v-=g;
 			transformMoving(new Vec3(0,v_v,0), new Vec3(0,0,0));
-		}
-		
-		if (pole_degree - v_degree <= min_pole_degree) {
-			pole_degree = min_pole_degree;
-		} else {
-			pole_degree -= v_degree;
+			
+			if (h<=1) {
+				pole_degree += 1;
+			} else {
+				if (pole_degree - 0.5 <= min_pole_degree) {
+					pole_degree = min_pole_degree;
+				} else {
+					pole_degree -= 0.5;
+				}
+			}
 		}
 	}
 	
@@ -214,6 +255,7 @@ public class Lamp extends NodeContainer{
 			pole_degree += v_degree;
 			if(v_degree - a_degree <=1) {
 				v_degree = 1f;
+				jumpDone();
 			} else {
 				v_degree -= a_degree;
 			}

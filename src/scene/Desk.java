@@ -25,6 +25,17 @@ public class Desk extends ModelContainer{
 		l4 = new Leg(gl);
 		deskPlatform = new DeskPlatform(gl);
 		
+		baseModels.add(l1);
+		baseModels.add(l2);
+		baseModels.add(l3);
+		baseModels.add(l4);
+		baseModels.add(deskPlatform);
+	}
+	
+	@Override
+	public void initial() {
+		// TODO Auto-generated method stub
+		super.initial();
 		l1.setTexture(test_texture);
 		l2.setTexture(test_texture);
 		l3.setTexture(test_texture);
@@ -41,12 +52,6 @@ public class Desk extends ModelContainer{
 		l3.scale(0.5f, 5f,0.5f);
 		l4.scale(0.5f, 5f,0.5f);
 		deskPlatform.scale(15f,0.5f,6f);
-		
-		baseModels.add(l1);
-		baseModels.add(l2);
-		baseModels.add(l3);
-		baseModels.add(l4);
-		baseModels.add(deskPlatform);
 	}
 }
 

@@ -31,6 +31,7 @@ public class HeaderNode extends NodeContainer{
 
 	float shade_degree = 30;
 	float pole_drgree = 0;
+	float y_degree=0;
 	
 	public HeaderNode(GL3 gl) {
 		// TODO Auto-generated constructor stub
@@ -76,6 +77,7 @@ public class HeaderNode extends NodeContainer{
 		// TODO Auto-generated method stub
 		Mat4 newWorldTransform = Mat4.multiply(worldTransform,Mat4Transform.translate(new Vec3(0,1f/2,0)));
 		newWorldTransform = Mat4.multiply(newWorldTransform, Mat4Transform.rotateAroundZ(pole_drgree+shade_degree));
+		newWorldTransform = Mat4.multiply(newWorldTransform, Mat4Transform.rotateAroundX(y_degree));
 		updateHead();
 		super.update(newWorldTransform, camera, light);
 	}	

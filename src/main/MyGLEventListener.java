@@ -21,7 +21,9 @@ public class MyGLEventListener implements GLEventListener {
 // model
 	Space space;
 	Desk desk;
+	Books books;
 	Lamp lamp;
+	PenContanier penContanier;
 // scene model
 	private Camera camera;
 	
@@ -81,10 +83,14 @@ public class MyGLEventListener implements GLEventListener {
 	    
 	    space  = new Space(gl);
 	    desk = new Desk(gl);
+	    books = new Books(gl);
+	    penContanier = new PenContanier(gl);
 	    lamp = new Lamp(gl);
 	    
 	    space.initial();
 	    desk.initial();
+	    books.initial();
+	    penContanier.initial();
 	}
 	
 	
@@ -92,11 +98,13 @@ public class MyGLEventListener implements GLEventListener {
 	public void render(GL3 gl) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 	    
-	    light.setPosition(getLightPosition());  // changing light position each frame
+//	    light.setPosition(getLightPosition());  // changing light position each frame
 	    light.render(gl);
 	    
 	    space.render(camera, light, gl);
 	    desk.render(camera, light, gl);
+	    books.render(camera, light, gl);
+	    penContanier.render(camera, light, gl);
 	    
 	    updateLamp();
 	    lamp.render(camera, light);

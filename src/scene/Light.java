@@ -22,7 +22,7 @@ public class Light {
 		material.setAmbient(0.3f, 0.3f, 0.3f);
 		material.setDiffuse(0.7f, 0.7f, 0.7f);
 		material.setSpecular(0.8f, 0.8f, 0.8f);
-		position = new Vec3(3f,2f,1f);
+		position = new Vec3(-5f,30f,-5f);
 		model = new Mat4(1);
 		this.gl = gl;
 	  }
