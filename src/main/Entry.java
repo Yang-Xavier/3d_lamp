@@ -3,6 +3,8 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -10,7 +12,10 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
@@ -18,7 +23,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
-import scene.*;;
+import scene.*;
 
 
 class MyMouseInput extends MouseMotionAdapter {
@@ -62,13 +67,15 @@ class MyKeyboardInput extends KeyAdapter  {
 	  }
 	}
 
+
 public class Entry extends JFrame {
 	  private static final int WIDTH = 1024;
 	  private static final int HEIGHT = 768;
 	  private static final Dimension dimension = new Dimension(WIDTH, HEIGHT);
-	  private GLCanvas canvas;
-	  private GLEventListener glEventListener;
+	  public GLCanvas canvas;
+	  public GLEventListener my_glEventListener;
 	  private final FPSAnimator animator; 
+	  
 	  
 	  public Entry(String textForTitleBar) {
 		    super(textForTitleBar);
@@ -77,22 +84,50 @@ public class Entry extends JFrame {
 		    glcapabilities.setNumSamples(4);
 		    canvas = new GLCanvas(glcapabilities);
 		    Camera camera = new Camera(Camera.DEFAULT_POSITION, Camera.DEFAULT_TARGET, Camera.DEFAULT_UP);
-		    glEventListener = new MyGLEventListener(camera);
-		    canvas.addGLEventListener(glEventListener);
+		    MyGLEventListener my_glEventListener = new MyGLEventListener(camera);
+		    this.my_glEventListener = my_glEventListener;
+		    canvas.addGLEventListener(my_glEventListener);
 		    canvas.addMouseMotionListener(new MyMouseInput(camera));
 		    canvas.addKeyListener(new MyKeyboardInput(camera));
 		    getContentPane().add(canvas, BorderLayout.CENTER);
+		    
+		    JPanel p = new JPanel();
+		    JButton b = new JButton("Random Jumping! (once)");
+		    b.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					my_glEventListener.randomJump();
+				}
+			});
+		    
+		    p.add(b);
+		    
+		    b = new JButton("Random posing! ");
+		    b.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					my_glEventListener.randomPosing();
+				}
+			});
+		    
+		    p.add(b);
+		    
+		    this.add(p, BorderLayout.SOUTH);
+		    
 		    addWindowListener(new WindowAdapter() {
-		      public void windowClosing(WindowEvent e) {
-		        animator.stop();
-		        remove(canvas);
-		        dispose();
-		        System.exit(0);
-		      }
-		    });
-		    animator = new FPSAnimator(canvas, 60);
-		    animator.start();
+			      public void windowClosing(WindowEvent e) {
+			        animator.stop();
+			        remove(canvas);
+			        dispose();
+			        System.exit(0);
+			      }
+			    });
+			    animator = new FPSAnimator(canvas, 60);
+			    animator.start();
 		  }
+	  
 	  public static void main(String[] args) {
 		    Entry e1 = new Entry("Lamp");
 		    e1.getContentPane().setPreferredSize(dimension);

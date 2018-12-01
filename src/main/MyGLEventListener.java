@@ -85,8 +85,8 @@ public class MyGLEventListener implements GLEventListener {
 	    
 	    space.initial();
 	    desk.initial();
-//	    lamp.initial();
 	}
+	
 	
 	// it could be rewrite in render a model array
 	public void render(GL3 gl) {
@@ -139,6 +139,14 @@ public class MyGLEventListener implements GLEventListener {
 //		      randoms[i] = (float)Math.random();
 //		    }
 //		  }
+	  
+		public void randomJump() {
+			lamp.randomJump();
+		}
+		
+		public void randomPosing() {
+			
+		}
 	  
 }
 //MyGLEventListener

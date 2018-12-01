@@ -27,19 +27,22 @@ public class Lamp extends NodeContainer{
 	BodyPoleNode bodyPole;
 	HeaderNode head;
 	
-	Vec3 baseAxis = new Vec3(0f, 5f, -7f);
-	Vec3 H_speed = new Vec3(0.01f,0,0);
-	Vec3 V_speed = new Vec3(0, 0.5f, 0);
+	Vec3 baseAxis = new Vec3(0f, 5f, -7f);	// table platform
 	
-	Vec3 basisSurface = new Vec3(-5f, 5.35f, -7f);
-	Mat4 basisTransform = Mat4Transform.translate(basisSurface);
-	Mat4 moveTransform = basisTransform;
+	Vec3 basisSurface = new Vec3(-5f, 5.35f, -7f);	// basis for lamp
+	Mat4 basisTransform = Mat4Transform.translate(basisSurface); // initial position and status 
+	Mat4 moveTransform = new Mat4(1);		// status for each action
 	
 	
-	final float pole_length = 1f;
+	final float pole_length = 1f;		// pole for lamp
 	
-	float pole_drgree = 60;
-	float shade_degree = 30;
+			
+	float min_pole_degree = 10; 	// the angle between the poles and the vertical direction
+	float max_pole_degree = 70;
+	float init_pole_degree = 60;
+	float pole_degree = init_pole_degree; 
+
+	float shade_degree = 60;		// the angle for the shade
 	
 	GL3 gl;
 	List<ModelContainer> modelContainers;
@@ -57,115 +60,206 @@ public class Lamp extends NodeContainer{
 	}
 	
 	public void update(Camera camera,Light light) {
-		bodyPole.degree = pole_drgree;
-		head.pole_drgree = pole_drgree;
+		bodyPole.degree = pole_degree;
+		head.pole_drgree = shade_degree;
 		head.shade_degree = 90f;
 		
 		if (jump) {
 			move();
 		}
 		
-		super.update(moveTransform, camera, light);
+		super.update(Mat4.multiply(basisTransform, moveTransform), camera, light);
 	}
 	
 	
 	private boolean jump  = true;
+	
 	public void randomJump() {
 		initJumpParameter();
 		jump  = true;
 	}
 	
 	public void jumpDone() {
-//		jump  = false;
-		flag = true;
-		moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
-		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
+		jump  = false;
+//		moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
+//		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
 	}
 	
-	private float distance,vx,vh,h,x,g;
+	private float distance,hori_v,v_v,h,x=0,y=0,g,turning_angle,forward, count_angle = 0, max_random, min_random;
+	private float compress_scale, compress_degree,final_compress_degree, a_degree,v_degree;
+	private float[] X= {0,10}, Y = {-2,2};	// limitation of the surface
+	
+	private boolean turning_dirct; //true: clockwist, false:anti-clockwist
+	private float turning_step = 0;
+	
 	private void initJumpParameter() {
-		distance = getRandomDistance();
-		vx = 0.1f;
-		g = 0.005f;
-		vh = (distance*g/vx)/2f;
-		h = 0;
-		System.out.println(distance+" " + vx + " " + vh + " " + x +" "  + should_turning );
+		// initialise the jump
+		max_random = 5;
+		min_random = 2;
+		distance = (float) Math.random()*(max_random-min_random)+min_random; // minimum 2   jumping length
+		hori_v = 0.1f;	// horizontal speed
+		g = 0.005f;	// gravity 
+		v_v = (distance*g/hori_v)/2f;	// vertical accelerate speed
+		h = 0;	// height 
+		
+		// initialise the turning 
+		turning_angle = (float) Math.random()*225+45;		// minimum 45 maximum 270
+		turning_dirct = Math.random()>0.5;		// true: clocktwisting, false:anti-clocktwisting
+		turning_step = turning_angle/40;		// angle for turning each time
+		forward = turning_dirct? -turning_angle:turning_angle;	//	turning direction
+		is_turning = true;		// a switch for turning 
+		count_angle+=forward;	// accumulation angle
+		
+		// initialise the transition
+		compress_scale = (max_pole_degree-min_pole_degree)/max_random;
+		compress_degree = compress_scale*distance;
+		final_compress_degree = max_pole_degree-compress_degree;
+		recover = false;
+		v_degree = 4;
+		a_degree = 0.04f;
 	}
 	
-	boolean flag = true;
-	private void move() {
-		if (flag) {
-			initJumpParameter();
-			flag = false;
+	private float basis_angel = 0;
+	private float turning_ = 0;
+	private void turning() {
+		if(turning_+turning_step>=turning_angle) { // final step for rotating
+			turning_ = turning_angle;
+			is_turning = false;
+			is_transition = true;
+			moveTransform = new Mat4(1);
+			transformBasis(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_angle: turning_angle,0));
+			turning_= 0;
+		} else {
+			turning_ += turning_step;
+			transformMoving(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_step: turning_step,0));
 		}
-		if (!should_turning) {
-			vh-=g;
-			x+=vx;
-			h+=vh;
-			if(x>=10) {
-				x =10;
+	}
+	
+	private boolean recover = false;
+	private void transtion() {
+//		distance decide the angle
+		if(!recover) {
+			if (pole_degree+2 >= max_pole_degree) {
+				pole_degree = max_pole_degree;
+				recover = true;
+			} else {
+				pole_degree +=2;
 			}
-			moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,h,0)));
-			if (h<=0) {
-				h=0;
-				jumpDone();
-				if(x ==10) {
-					should_turning = true;
+		} else {
+			if (pole_degree - v_degree <= final_compress_degree) {
+				pole_degree = final_compress_degree;
+				is_transition = false;
+				is_jumping = true;
+			} else {
+				pole_degree -= v_degree;
+				if(v_degree - a_degree <=1) {
+					v_degree = 1f;
+				} else {
+					v_degree -= a_degree;
 				}
 			}
+		}
+	}
+	
+	private float lamp_theta = 0;
+	private float count_hori = 0;
+	private float horizontal_step = 0;
+	private void jumping() {
+		if (x+hori_v*Math.cos(lamp_theta)>=X[1]) {  // x right end
+			x = X[1];
+		} else if(x+hori_v*Math.cos(lamp_theta)<=X[0]){ // x left end
+			x = X[0];
 		} else {
+			if (y+hori_v*Math.sin(lamp_theta)>=Y[1]) { // y top end
+				y = Y[1];
+			} else if (y+hori_v*Math.sin(lamp_theta)<=Y[0]) {	// y bottom end
+				y = Y[0];
+			} else {	// y,x not end
+				x+=hori_v*Math.cos(lamp_theta);
+				y+=hori_v*Math.sin(lamp_theta);
+				transformMoving(new Vec3(hori_v,0,0), new Vec3(0,0,0));
+				horizontal_step+=hori_v;
+				count_hori+=hori_v;
+			}
+		} // horizontal moving judging
+		
+		if (h+v_v<=0) {
+			h=0;
+			is_jumping=false;
+			transformBasis(new Vec3(horizontal_step,0,0), new Vec3(0,0,0));
+			moveTransform = new Mat4(1);
+			horizontal_step = 0;
+			is_jumping = false;
+			is_stop_jumping_transition = true;
+			v_degree = 8;
+			a_degree = 0.08f;
+		} else {
+			h+=v_v;
+			v_v-=g;
+			transformMoving(new Vec3(0,v_v,0), new Vec3(0,0,0));
+		}
+		
+		if (pole_degree - v_degree <= min_pole_degree) {
+			pole_degree = min_pole_degree;
+		} else {
+			pole_degree -= v_degree;
+		}
+	}
+	
+	private void stop_jump_transition() {
+		if (pole_degree + v_degree >= init_pole_degree) {
+			pole_degree = init_pole_degree;
+			is_stop_jumping_transition = false;
+		} else {
+			pole_degree += v_degree;
+			if(v_degree - a_degree <=1) {
+				v_degree = 1f;
+			} else {
+				v_degree -= a_degree;
+			}
+		}
+	}
+		
+	private boolean is_turning= false;
+	private boolean is_jumping= false;
+	private boolean is_transition= false;
+	private boolean is_stop_jumping_transition = false;
+	
+	private void move() {
+		if(is_turning) {
 			turning();
 		}
-	}
-	
-	
-	private void moveTransition() {
-		
-	}
-	
-	
-	private float turn_angel = 0;
-	private boolean turning_dirct = true; //true: clockwist, false:anti-clockwist
-	private boolean should_turning = false;
-	private void turning() {
-		moveTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,0,0)));
-		moveTransform = Mat4.multiply(moveTransform, Mat4Transform.rotateAroundY(turn_angel));
-		turn_angel+=turning_dirct?-2:2;
-		if(turning_dirct) {
-			if(turn_angel <-180) {
-				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,0,0)));
-				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundY(-180));
-				turn_angel = 0;
-				turning_dirct = !turning_dirct;
-				should_turning = false;
-				x = 0;
-			}
-		} else {
-			if(turn_angel >180) {
-				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(new Vec3(x,0,0)));
-				basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundY(180));
-				turn_angel = 0;
-				turning_dirct = !turning_dirct;
-				should_turning = false;
-				x = 0;
-			}
+		if(is_transition) {
+			transtion();
+		}
+		if(is_jumping) {
+			lamp_theta = (float) Math.toRadians(count_angle);
+			jumping();
+		}
+		if(is_stop_jumping_transition) {
+			stop_jump_transition();
 		}
 	}
 	
+	private void transformMoving(Vec3 translate,Vec3 turning_angle) {
+		moveTransform = Mat4.multiply(moveTransform, Mat4Transform.translate(translate));
+		moveTransform = Mat4.multiply(moveTransform, Mat4Transform.rotateAroundX(turning_angle.x));
+		moveTransform = Mat4.multiply(moveTransform, Mat4Transform.rotateAroundY(turning_angle.y));
+		moveTransform = Mat4.multiply(moveTransform, Mat4Transform.rotateAroundZ(turning_angle.z));
+	}
+	
+	private void transformBasis(Vec3 translate,Vec3 turning_angle) {
+		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.translate(translate));
+		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundX(turning_angle.x));
+		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundY(turning_angle.y));
+		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundZ(turning_angle.z));
+	}
+	
+
 	private float getRandomDistance() {
 		
-		float randomDis = (float) Math.random()*5+2;
-//		if(10-x<=4f) {
-//			if (10-x>=2f) {
-//				randomDis = 10-x;
-//			} else {
-//				randomDis = (float) Math.random()*x;
-//				x = 10-x;
-//				should_turning = true;
-//			}
-//		} else if (x+randomDis>10) {
-//			randomDis = (float) Math.random()*(8-x)+2;
-//		}
+		float randomDis = (float) Math.random()*8+2;
+		
 		return randomDis;
 	}
 	
