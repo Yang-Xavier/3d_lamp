@@ -24,9 +24,8 @@ public class BaseNode {
 	public String name;
 	
 	List<BaseNode> childrenNodes;
-	Mat4 relativeTransform;
-	Mat4 transform = new Mat4(1);
-	Mat4 worldT = new Mat4(1);
+	public Mat4 transform = new Mat4(1);
+	public Mat4 worldT = new Mat4(1);
 	public Mat4 position =  new Mat4(1);
 	public Mat4 scale =  new Mat4(1);
 	public Mat4 rotate =  new Mat4(1);
@@ -34,14 +33,13 @@ public class BaseNode {
 	public Mat4 originR = new Mat4(1);
 	public Mat4 originS = new Mat4(1);
 	
+	public Vec3 wordPosition;
 	
 	public BaseNode(GL3 gl) {
-		// TODO Auto-generated constructor stub
 		this.gl = gl;
 		childrenNodes = new ArrayList<BaseNode>();
 	}
 	public BaseNode(GL3 gl, String name) {
-		// TODO Auto-generated constructor stub
 		this.gl = gl;
 		this.name = name;
 		childrenNodes = new ArrayList<BaseNode>();
@@ -81,6 +79,7 @@ public class BaseNode {
 	
 	public void update(Mat4 worldTransform,Camera camera,Light light) {
 		worldT = Mat4.multiply(worldTransform, transform);
+		updateWorldPosition(worldT);
 		if (!childrenNodes.isEmpty()) {
 			for(BaseNode child : childrenNodes) {
 				child.update(worldT,camera,light);
@@ -88,9 +87,6 @@ public class BaseNode {
 		}
 	}
 	
-	public void setRelativeTransform(Mat4 relativeTransform) {
-		this.relativeTransform = relativeTransform;
-	}
 	
 	public Model render(Camera camera,Light light) {
 		model = new Model(gl, camera, light, shader, material, calculateScale(worldT), mesh, texture);
@@ -128,16 +124,6 @@ public class BaseNode {
 		transform = Mat4.multiply(transform, this.rotate);
 	}
 	
-	public void translateTo(Vec3 T) {
-		this.position = Mat4.multiply(this.position, Mat4Transform.translate(T.x, T.y, T.z));
-	}
-	
-	public void rotateTo(Vec3 R) {
-		Mat4 rotateMat =  Mat4Transform.rotateAroundX(R.x);
-		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundY(R.y));
-		rotateMat = Mat4.multiply(rotateMat, Mat4Transform.rotateAroundZ(R.z));
-		this.rotate = Mat4.multiply(this.rotate, rotateMat);
-	}
 	
 	public void scale(Vec3 S) {
 		this.scale = Mat4.multiply(this.scale, Mat4Transform.scale(S.x, S.y,S.z));
@@ -160,6 +146,16 @@ public class BaseNode {
 		transformMat = Mat4.multiply(transformMat, position);
 		transformMat = Mat4.multiply(transformMat, rotate);
 		return transformMat;
+	}
+	
+	public void updateWorldPosition(Mat4 worldT) {
+		float[] fs= worldT.toFloatArrayForGLSL();
+		wordPosition = new Vec3(fs[13],fs[14],fs[15]);
+	} 
+	
+	public Vec3 getWorldPosition() {
+		
+		return this.wordPosition;
 	}
 	
 }

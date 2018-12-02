@@ -83,6 +83,10 @@ public final class Vec3 {
     return new Vec3(v.x*f, v.y*f, v.z*f);
   }
   
+  public static Vec3 minus(Vec3 v1,Vec3 v2) {
+	  return new Vec3(v1.x-v2.x, v1.y-v2.y,v1.z-v2.z);
+  }
+  
   public static Vec3 crossProduct(Vec3 a, Vec3 b) {
     return new Vec3(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x);
   }

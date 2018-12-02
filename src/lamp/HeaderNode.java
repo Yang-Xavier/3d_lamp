@@ -29,9 +29,9 @@ public class HeaderNode extends NodeContainer{
 	Bulb bulb;
 	
 
-	float shade_degree = 30;
+	float shade_degree = 0;
 	float pole_drgree = 0;
-	float y_degree=0;
+	float x_degree=0;
 	
 	public HeaderNode(GL3 gl) {
 		// TODO Auto-generated constructor stub
@@ -62,7 +62,6 @@ public class HeaderNode extends NodeContainer{
 		lampshade_a.addChild(lampshade_b);
 		lampshade_b.addChild(lampshade_c);
 		lampshade_c.addChild(bulb);
-		
 	}
 	
 	void updateHead() {
@@ -75,11 +74,15 @@ public class HeaderNode extends NodeContainer{
 	@Override
 	public void update(Mat4 worldTransform, Camera camera, Light light) {
 		// TODO Auto-generated method stub
-		Mat4 newWorldTransform = Mat4.multiply(worldTransform,Mat4Transform.translate(new Vec3(0,1f/2,0)));
+		Mat4 newWorldTransform = Mat4.multiply(worldTransform,Mat4Transform.translate(new Vec3(0,0.5f,0)));
 		newWorldTransform = Mat4.multiply(newWorldTransform, Mat4Transform.rotateAroundZ(pole_drgree+shade_degree));
-		newWorldTransform = Mat4.multiply(newWorldTransform, Mat4Transform.rotateAroundX(y_degree));
+		newWorldTransform = Mat4.multiply(newWorldTransform, Mat4Transform.rotateAroundX(x_degree));
 		updateHead();
+
 		super.update(newWorldTransform, camera, light);
+//		System.out.println(bulb.getWorldPosition()+" " + lampshade_b.getWorldPosition());
+//		System.out.println(Vec3.minus(bulb.getWorldPosition(), lampshade_b.getWorldPosition()));
+		
 	}	
 }
 
@@ -97,7 +100,7 @@ class Lampshade_A extends BaseNode{
 class Lampshade_B extends BaseNode{
 	public Lampshade_B(GL3 gl) {
 		// TODO Auto-generated constructor stub
-		super(gl,"Lampshade_A");
+		super(gl,"Lampshade_B");
 		super.mesh = new Mesh(gl, Cylinder.vertices.clone(), Cylinder.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);

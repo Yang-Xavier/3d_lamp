@@ -18,4 +18,10 @@ public class Constant {
 	
 	public static final Vec3 DEFAULT_CAMERA_POSITION = new Vec3(0f,10f,10f);
 	public static final Vec3 DEFAULT_CAMERA_TRAGET = new Vec3(0f,5f,0f);
+	
+	public static final Vec3 NATURE_LIGHT_DIRECTION = new Vec3(-0.2f, -1.0f, -0.3f);
+	public static final Vec3 NATURE_LIGHT_AMBIENT = new Vec3(0.2f, 0.2f, 0.2f);
+	public static final Vec3 NATURE_LIGHT_DIFFUSE = new Vec3(0.3f, 0.3f, 0.3f);
+	public static final Vec3 NATURE_LIGHT_SPECULAR = new Vec3(0.4f, 0.4f, 0.4f);
+
 }

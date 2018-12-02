@@ -58,6 +58,12 @@ public class Model {
     
     shader.setVec3(gl, "viewPos", camera.getPosition());
 
+  shader.setVec3(gl, "dir_light.direction", Constant.NATURE_LIGHT_DIRECTION);
+  shader.setVec3(gl, "dir_light.ambient", Constant.NATURE_LIGHT_AMBIENT);
+  shader.setVec3(gl, "dir_light.diffuse", Constant.NATURE_LIGHT_DIFFUSE);
+  shader.setVec3(gl, "dir_light.specular", Constant.NATURE_LIGHT_SPECULAR);
+
+    
     shader.setVec3(gl, "light.position", light.getPosition());
     shader.setVec3(gl, "light.ambient", light.getMaterial().getAmbient());
     shader.setVec3(gl, "light.diffuse", light.getMaterial().getDiffuse());

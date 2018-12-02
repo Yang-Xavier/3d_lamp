@@ -50,6 +50,9 @@ public class Lamp extends NodeContainer{
 	GL3 gl;
 	List<ModelContainer> modelContainers;
 	
+	Vec3 forword = new Vec3();
+	
+	
 	public Lamp(GL3 gl) {
 		super(gl, "lamp");
 		this.gl = gl;
@@ -66,7 +69,14 @@ public class Lamp extends NodeContainer{
 		bodyPole.degree = pole_degree;
 		head.pole_drgree = pole_degree;
 		head.shade_degree = shade_degree;
-		head.y_degree = shade_shake_degree;
+		head.x_degree = shade_shake_degree;
+		
+		double theta = Math.toRadians(shade_degree);
+		double alpha = Math.toRadians(count_angle+shade_shake_degree);
+		forword.x = (float) (Math.sin(theta)*Math.cos(alpha));
+		forword.y = -(float) Math.cos(theta);
+		forword.z = (float) (Math.sin(theta)*Math.sin(alpha));
+		
 		if (jump) {
 			move();
 		}
