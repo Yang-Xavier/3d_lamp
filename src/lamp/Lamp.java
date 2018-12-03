@@ -52,7 +52,6 @@ public class Lamp extends NodeContainer{
 	
 	Vec3 forword = new Vec3();
 	
-	
 	public Lamp(GL3 gl) {
 		super(gl, "lamp");
 		this.gl = gl;
@@ -81,10 +80,11 @@ public class Lamp extends NodeContainer{
 		if (jump) {
 			move();
 		}
+		
 		super.update(Mat4.multiply(basisTransform, moveTransform), camera, light);
 	}
 	
-	private boolean jump  = true;
+	private boolean jump  = false;
 	
 	public void randomJump() {
 		initJumpParameter();
@@ -243,7 +243,7 @@ public class Lamp extends NodeContainer{
 			is_jumping = false;
 			is_stop_jumping_transition = true;
 			v_degree = 4;
-			a_degree = 0.04f;
+			a_degree = 0.01f;
 		} else {
 			h+=v_v;
 			v_v-=g;
@@ -265,11 +265,12 @@ public class Lamp extends NodeContainer{
 		if (pole_degree + v_degree >= init_pole_degree) {
 			pole_degree = init_pole_degree;
 			is_stop_jumping_transition = false;
+			jump = false;
 		} else {
 			pole_degree += v_degree;
 			if(v_degree - a_degree <=1) {
 				v_degree = 1f;
-				jumpDone();
+				jump = false;
 			} else {
 				v_degree -= a_degree;
 			}
@@ -335,6 +336,18 @@ public class Lamp extends NodeContainer{
 	
 	public Vec3 getBulbPosition() {
 		return head.getBulbPosition();
+	}
+	
+	public void turnOn() {
+		head.turnOn();
+	}
+	
+	public void turnOff() {
+		head.turnOff();
+	}
+	
+	public boolean isJumping() {
+		return jump;
 	}
 	  
 	  

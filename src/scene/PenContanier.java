@@ -68,7 +68,6 @@ class Container extends BaseModel {
 		super.mesh = new Mesh(gl, CylinderContainer.vertices.clone(), CylinderContainer.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
-
 	}
 }
 

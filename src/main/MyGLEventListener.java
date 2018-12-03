@@ -16,7 +16,6 @@ import basisObj.*;
 
 public class MyGLEventListener implements GLEventListener {
 		
-	String TestTexture = Constant.TEXTURE_BASEPATH+"brickwall.jpg";
 	Light light;
 // model
 	Space space;
@@ -75,7 +74,6 @@ public class MyGLEventListener implements GLEventListener {
 	}
 	
 	public void initialise(GL3 gl) {
-		int[] testTexture = TextureLibrary.loadTexture(gl, TestTexture);
 		
 		light = new Light(gl);
 		light.setShade(new String[] {Constant.DEFAULT_LIGHT_VS, Constant.DEFAULT_LIGHT_FS});
@@ -166,13 +164,15 @@ public class MyGLEventListener implements GLEventListener {
 	  public void turnFlashLight(boolean status) {
 		  if (status) {
 				light.createFlashLight();
+				lamp.turnOn();
 			} else {
 				light.disposeFlashLight();
+				lamp.turnOff();
 			}
 	  }
 	  
 		public void randomJump() {
-			lamp.randomJump();
+			if(!lamp.isJumping()) {	lamp.randomJump();}
 		}
 		
 		public void randomPosing() {

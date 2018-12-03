@@ -33,11 +33,16 @@ public class HeaderNode extends NodeContainer{
 	float pole_drgree = 0;
 	float x_degree=0;
 	
+	int[] bulb_texture_on,bulb_texture_off;
+	
+	boolean bulbOn = false,change = false;
+	
 	public HeaderNode(GL3 gl) {
 		// TODO Auto-generated constructor stub
 		super(gl, "header");
 		
 		texture = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"brickwall.jpg");
+		bulb_texture_on = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"white.jpg");
 		
 		joint = new JointNode(gl,"h-joint");
 		lampshade_a = new Lampshade_A(gl);
@@ -49,7 +54,8 @@ public class HeaderNode extends NodeContainer{
 		lampshade_a.setTexture(texture);
 		lampshade_b.setTexture(texture);
 		lampshade_c.setTexture(texture);
-		bulb.setTexture(texture);
+		
+		bulb.setTexture(bulb_texture_on);
 
 		
 		lampshade_a.originS = Mat4Transform.scale(new Vec3(0.3f, 0.3f, 0.3f));
@@ -64,11 +70,30 @@ public class HeaderNode extends NodeContainer{
 		lampshade_c.addChild(bulb);
 	}
 	
+	public void turnOn() {
+		this.bulbOn = true;
+		change = true;
+	}
+	
+	public void turnOff() {
+		this.bulbOn = false;
+		change = true;
+	}
+	
+	
 	void updateHead() {
 		lampshade_a.translate(new Vec3(0,-0.2f,0));
 		lampshade_b.translate(new Vec3(0f,-0.15f,0));
 		lampshade_c.translate(new Vec3(0f,-0.45f,0));
 		bulb.translate(new Vec3(0f,0f,0));
+		if(change)
+			if (this.bulbOn) {
+				bulb.setOnShader();
+				change = false;
+			} else {
+				bulb.setOffShader();
+				change = false;
+			}
 	}
 	
 	@Override
@@ -128,6 +153,14 @@ class  Bulb extends BaseNode{
 		super.mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
+	}
+	
+	public void setOnShader() {
+		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.SHADER_BASEPATH+"fs_bulb.txt");
+	}
+	
+	public void setOffShader() {
+		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 	}
 }
 
