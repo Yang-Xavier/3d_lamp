@@ -3,6 +3,7 @@ package scene;
 import com.jogamp.opengl.GL3;
 
 import basisObj.Cube;
+import basisObj.TwoTriangles;
 import gmaths.Vec3;
 import tool.BaseModel;
 import tool.Constant;
@@ -10,24 +11,33 @@ import tool.Material;
 import tool.Mesh;
 import tool.ModelContainer;
 import tool.Shader;
+import tool.TextureLibrary;
 
 public class Books extends ModelContainer{
 	
-	int[] test_texture;
+	int[] texture_b,f1,f2,f3,f4;
 	Book book1, book2, book3, book4;
+	BookFace bf1,bf2,bf3,bf4;
 	
 	public Books(GL3 gl) {
 		super(gl);
 		// TODO Auto-generated constructor stub
+		texture_b = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"paper.jpg");
+		f1 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"book1.jpeg");
 		book1 = new Book(gl); 
 		book2 = new Book(gl);
 		book3 = new Book(gl); 
 		book4 = new Book(gl);
 		
-		book1.setTexture(test_texture);
-		book2.setTexture(test_texture);
-		book3.setTexture(test_texture);
-		book4.setTexture(test_texture);
+		bf1 = new BookFace(gl);
+		bf2 = new BookFace(gl);
+		bf3 = new BookFace(gl);
+		bf4 = new BookFace(gl);
+		
+		book1.setTexture(texture_b);
+		book2.setTexture(texture_b);
+		book3.setTexture(texture_b);
+		book4.setTexture(texture_b);
 		
 		
 		baseAxis = new Vec3( 0f, 5f, -7f);
@@ -36,6 +46,10 @@ public class Books extends ModelContainer{
 		baseModels.add(book2);
 		baseModels.add(book3);
 		baseModels.add(book4);
+		baseModels.add(bf1);
+		baseModels.add(bf2);
+		baseModels.add(bf3);
+		baseModels.add(bf4);
 		
 	}
 	
@@ -70,5 +84,14 @@ class Book extends BaseModel {
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
 	} 
-	
+}
+
+class BookFace extends BaseModel {
+	public BookFace(GL3 gl) {
+		super(gl);
+		// TODO Auto-generated constructor stub
+		super.mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
+		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
+	} 
 }

@@ -27,7 +27,7 @@ public class FoundationNode extends NodeContainer {
 	public FoundationNode(GL3 gl) {
 		super(gl,"Foundation");
 		// TODO Auto-generated constructor stub
-		test_texture = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"iron.jpeg");
+		test_texture = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"brickwall.jpg");
 		foundationBottom = new FoundationBottom(gl,"f-bottom");
 		joint = new JointNode(gl, "f-joint");
 		foundationBottomCone = new FoundationBottomCone(gl, "f-cone");

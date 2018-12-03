@@ -18,7 +18,7 @@ public class Desk extends ModelContainer{
 	
 	public Desk(GL3 gl) {
 		super(gl);
-		test_texture = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"brickwall.jpg");
+		test_texture = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"desk_wood.jpeg");
 		l1 = new Leg(gl);
 		l2 = new Leg(gl);
 		l3 = new Leg(gl);

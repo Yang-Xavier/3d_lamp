@@ -11,16 +11,19 @@ import tool.Material;
 import tool.Mesh;
 import tool.ModelContainer;
 import tool.Shader;
+import tool.TextureLibrary;
 
 public class PenContanier extends ModelContainer{
 	
-	int[] test_texture;
+	int[] texture,texture2;
 	Container penContainer;
 	Pen p1,p2,p3;
 	
 	public PenContanier(GL3 gl) {
 		// TODO Auto-generated constructor stub
 		super(gl);
+		texture = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"iron.jpeg");
+		texture2 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"pen_container.jpg");
 		penContainer = new Container(gl);
 		p1 = new Pen(gl);
 		p2 = new Pen(gl);
@@ -29,6 +32,10 @@ public class PenContanier extends ModelContainer{
 		baseAxis = new Vec3( -1f, 5f, -7f);
 		baseAxis = Vec3.add(baseAxis, new Vec3(-5f,0f,0));
 		
+		p1.setTexture(texture);
+		p2.setTexture(texture);
+		p3.setTexture(texture);
+		penContainer.setTexture(texture2);
 		baseModels.add(penContainer);
 		baseModels.add(p1);
 		baseModels.add(p2);
