@@ -3,7 +3,6 @@ package lamp;
 import com.jogamp.opengl.GL3;
 
 import basisObj.Cylinder;
-import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import tool.BaseNode;

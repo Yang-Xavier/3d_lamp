@@ -2,11 +2,8 @@ package lamp;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
 import com.jogamp.opengl.GL3;
 
@@ -15,8 +12,6 @@ import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import scene.Camera;
 import scene.Light;
-import tool.BaseNode;
-import tool.Model;
 import tool.ModelContainer;
 import tool.NodeContainer;
 
@@ -213,7 +208,6 @@ public class Lamp extends NodeContainer{
 	}
 	
 	private float lamp_theta = 0;
-	private float count_hori = 0;
 	private float horizontal_step = 0;
 	private void jumping() {
 		if (x+hori_v*Math.cos(lamp_theta)>=X[1]) {  // x right end
@@ -230,7 +224,6 @@ public class Lamp extends NodeContainer{
 				y+=hori_v*Math.sin(lamp_theta);
 				transformMoving(new Vec3(hori_v,0,0), new Vec3(0,0,0));
 				horizontal_step+=hori_v;
-				count_hori+=hori_v;
 			}
 		} // horizontal moving judging
 		
@@ -311,24 +304,13 @@ public class Lamp extends NodeContainer{
 		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundY(turning_angle.y));
 		basisTransform = Mat4.multiply(basisTransform, Mat4Transform.rotateAroundZ(turning_angle.z));
 	}
-	
-
-	private float getRandomDistance() {
 		
-		float randomDis = (float) Math.random()*8+2;
-		
-		return randomDis;
-	}
-	
 	private double startTime=getSeconds();
 	
 	private double getSeconds() {
 	    return System.currentTimeMillis()/1000.0;
 	}
 	
-	private float getInterval() {
-		return (float) (getSeconds() - startTime);
-	}
 	
 	public Vec3 getForward() {
 		return forword;

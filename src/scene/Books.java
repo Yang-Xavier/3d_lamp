@@ -3,7 +3,6 @@ package scene;
 import com.jogamp.opengl.GL3;
 
 import basisObj.Cube;
-import basisObj.TwoTriangles;
 import gmaths.Vec3;
 import tool.BaseModel;
 import tool.Constant;

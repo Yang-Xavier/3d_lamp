@@ -1,21 +1,17 @@
 package scene;
 
 import java.nio.*;
-import java.util.IllegalFormatFlagsException;
-import java.util.Vector;
 
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 import gmaths.*;
 import tool.Material;
 import tool.Shader;
-import basisObj.*;
 
 
 public class Light {
 	  private Material material;
 	  private Vec3 position;
-	  private Mat4 model;
 	  private Shader shader;
 	  private Camera camera;
 	  private GL3 gl;
@@ -29,7 +25,6 @@ public class Light {
 		material.setDiffuse(0.7f, 0.7f, 0.7f);
 		material.setSpecular(0.8f, 0.8f, 0.8f);
 		position = new Vec3(-5f,10f,-5f);
-		model = new Mat4(1);
 		this.gl = gl;
 		
 		
@@ -149,10 +144,6 @@ public class Light {
 	  public void setIndices(int[] indices) {
 		  this.indices = indices;
 	  }
-	  
-	  private void setVertice(float[] vertices) {
-		this.vertices = vertices;
-	}
 	  
 	  private void fillBuffers(GL3 gl) {
 		    gl.glGenVertexArrays(1, vertexArrayId, 0);

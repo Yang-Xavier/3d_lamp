@@ -48,12 +48,6 @@ public class ModelContainer {
 		}
 	}
 	
-	public void rotatePoint(Vec3 point, Vec3 angle ) {
-		for(BaseModel baseModel: baseModels) {
-//			baseModel.translate(translate);
-		}
-	}
-	
 	public Vec3 relativePosition(float x, float y, float z) {
 		return new Vec3(baseAxis.x+x, baseAxis.y+y, baseAxis.z+z);
 	}

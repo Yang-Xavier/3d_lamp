@@ -3,7 +3,6 @@ package scene;
 import com.jogamp.opengl.GL3;
 
 import basisObj.Cube;
-import gmaths.Mat4;
 import tool.BaseModel;
 import tool.Constant;
 import tool.Material;

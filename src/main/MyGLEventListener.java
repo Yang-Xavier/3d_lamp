@@ -3,16 +3,10 @@ package main;
 import gmaths.*;
 import lamp.Lamp;
 import scene.*;
-import test.TestCube;
 import tool.*;
 
-import java.nio.*;
-import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
-import com.jogamp.opengl.util.*;
-import com.jogamp.opengl.util.awt.*;
 
-import basisObj.*;
 
 public class MyGLEventListener implements GLEventListener {
 		
@@ -61,7 +55,6 @@ public class MyGLEventListener implements GLEventListener {
 //	    gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
 //	    gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
 	    initialise(gl);
-	    startTime = getSeconds();
 	}
 
 	@Override
@@ -119,19 +112,6 @@ public class MyGLEventListener implements GLEventListener {
 		light.updateFlashLight(lamp.getBulbPosition(), lamp.getForward());
 	}
 	
-	  private Vec3 getLightPosition() {
-		    double elapsedTime = getSeconds()-startTime;
-		    float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50))*Math.sin(Math.toRadians(elapsedTime*50)));
-		    float y = 2.7f;
-		    float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
-		    
-//		    return new Vec3(x,y,z);
-		    
-		    return new Vec3(5f,3.4f,5f);  // use to set in a specific position for testing
-		  }
-	  
-
-	  
 	  private void disposeModels(GL3 gl) {
 	    light.dispose(gl);
 	    space.dispose(gl);
@@ -139,19 +119,6 @@ public class MyGLEventListener implements GLEventListener {
 	    lamp.dispose(gl);
 	  }
 	  
-	  private double startTime;
-	  private double getSeconds() {
-		    return System.currentTimeMillis()/1000.0;
-		  }
-	  
-//	  private int NUM_RANDOMS = 1000;
-//	  private float[] randoms;
-//	  private void createRandomNumbers() {
-//		    randoms = new float[NUM_RANDOMS];
-//		    for (int i=0; i<NUM_RANDOMS; ++i) {
-//		      randoms[i] = (float)Math.random();
-//		    }
-//		  }
 	  	
 	  public void turnSpotLight(boolean status) {
 		if (status) {

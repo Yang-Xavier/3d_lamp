@@ -14,7 +14,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import com.jogamp.opengl.GLCapabilities;
@@ -69,7 +68,11 @@ class MyKeyboardInput extends KeyAdapter  {
 
 
 public class Entry extends JFrame {
-	  private static final int WIDTH = 1024;
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static final int WIDTH = 1024;
 	  private static final int HEIGHT = 768;
 	  private static final Dimension dimension = new Dimension(WIDTH, HEIGHT);
 	  public GLCanvas canvas;

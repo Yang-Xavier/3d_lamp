@@ -2,13 +2,11 @@ package tool;
 
 import com.jogamp.opengl.GL3;
 
-import basisObj.Cube;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import scene.Camera;
 import scene.Light;
-import tool.Constant;
 import tool.Material;
 import tool.Mesh;
 import tool.Model;

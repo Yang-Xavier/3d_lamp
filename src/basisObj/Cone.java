@@ -1,6 +1,5 @@
 package basisObj;
 
-import java.awt.AlphaComposite;
 
 public class Cone {
 	private static final int XZSTEP = 30;

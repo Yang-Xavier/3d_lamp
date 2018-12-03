@@ -4,7 +4,6 @@ import com.jogamp.opengl.GL3;
 
 import basisObj.Cone;
 import basisObj.Cylinder;
-import basisObj.Sphere;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;

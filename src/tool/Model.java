@@ -4,8 +4,6 @@ import gmaths.*;
 import scene.Camera;
 import scene.Light;
 
-import java.nio.*;
-import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 
 public class Model {
