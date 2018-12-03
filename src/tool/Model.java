@@ -1,5 +1,5 @@
 package tool;
-
+/*This is from tutorial*/
 import gmaths.*;
 import scene.Camera;
 import scene.Light;

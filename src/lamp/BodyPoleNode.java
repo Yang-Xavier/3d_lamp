@@ -1,5 +1,5 @@
 package lamp;
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 import com.jogamp.opengl.GL3;
 
 import gmaths.Mat4;

@@ -1,5 +1,5 @@
 package tool;
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 import gmaths.Vec3;
 
 public class Constant {

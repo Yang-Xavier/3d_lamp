@@ -1,5 +1,5 @@
 package basisObj;
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 public class Cylinder {
 	private static final int XZSTEP = 30;
 	private static final int YTERML = 5;

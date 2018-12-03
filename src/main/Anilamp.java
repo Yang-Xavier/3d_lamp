@@ -1,5 +1,8 @@
 package main;
 
+/* Author Bingxun Yang xavierybx@gmail.com */
+
+/*some parts are my work some parts are from the tutorial code*/
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -23,6 +26,7 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import scene.*;
+
 
 
 class MyMouseInput extends MouseMotionAdapter {
@@ -67,10 +71,7 @@ class MyKeyboardInput extends KeyAdapter  {
 	}
 
 
-public class Entry extends JFrame {
-	  /**
-	 * 
-	 */
+public class Anilamp extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 1024;
 	  private static final int HEIGHT = 768;
@@ -81,7 +82,7 @@ public class Entry extends JFrame {
 	  
 	  boolean turnSpotLight = true;
 	  boolean turnFlashLight = true;
-	  public Entry(String textForTitleBar) {
+	  public Anilamp(String textForTitleBar) {
 		    super(textForTitleBar);
 		    GLCapabilities glcapabilities = new GLCapabilities(GLProfile.get(GLProfile.GL3));
 		    glcapabilities.setSampleBuffers(true); 
@@ -106,10 +107,7 @@ public class Entry extends JFrame {
 			});
 		    
 		    p.add(jb);
-		    
-		    
 		    JButton tb = new JButton("Turn off spot light ");
-		    
 		    tb.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -162,7 +160,7 @@ public class Entry extends JFrame {
 		  }
 	  
 	  public static void main(String[] args) {
-		    Entry e1 = new Entry("Lamp");
+		    Anilamp e1 = new Anilamp("Lamp");
 		    e1.getContentPane().setPreferredSize(dimension);
 		    e1.pack();
 		    e1.setVisible(true);

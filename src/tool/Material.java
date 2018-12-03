@@ -1,4 +1,5 @@
 package tool;
+/*This is from  the tutorial*/
 import gmaths.*;
 
  /**

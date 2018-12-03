@@ -1,5 +1,5 @@
 package scene;
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 import java.nio.*;
 
 import com.jogamp.common.nio.*;

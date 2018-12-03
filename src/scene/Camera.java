@@ -1,5 +1,5 @@
 package scene;
-
+/*This is from the tutorial*/
 import gmaths.*;
 
 public class Camera {

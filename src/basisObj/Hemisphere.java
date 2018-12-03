@@ -1,5 +1,5 @@
 package basisObj;
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 public class Hemisphere {
 	private static final int XZCSTEP= 30;
 	  private static final int  YSTEP = 15;	

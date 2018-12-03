@@ -1,5 +1,5 @@
 package basisObj;
-
+/*This is from the tutorial*/
 public final class TwoTriangles {
   
   // ***************************************************

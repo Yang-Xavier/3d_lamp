@@ -1,5 +1,6 @@
 package main;
 
+/*some parts are my work some parts are from the tutorial code*/
 import gmaths.*;
 import lamp.Lamp;
 import scene.*;

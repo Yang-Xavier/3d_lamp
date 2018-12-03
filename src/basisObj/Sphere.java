@@ -1,5 +1,5 @@
 package basisObj;
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 public class Sphere {
 	
 	  private static final int XZCSTEP= 36;

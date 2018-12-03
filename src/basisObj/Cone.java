@@ -1,6 +1,6 @@
 package basisObj;
 
-
+/* Author Bingxun Yang xavierybx@gmail.com */
 public class Cone {
 	private static final int XZSTEP = 30;
 	private static final int YTERML = 6;
