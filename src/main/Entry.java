@@ -76,7 +76,8 @@ public class Entry extends JFrame {
 	  public GLEventListener my_glEventListener;
 	  private final FPSAnimator animator; 
 	  
-	  
+	  boolean turnSpotLight = true;
+	  boolean turnFlashLight = true;
 	  public Entry(String textForTitleBar) {
 		    super(textForTitleBar);
 		    GLCapabilities glcapabilities = new GLCapabilities(GLProfile.get(GLProfile.GL3));
@@ -92,8 +93,8 @@ public class Entry extends JFrame {
 		    getContentPane().add(canvas, BorderLayout.CENTER);
 		    
 		    JPanel p = new JPanel();
-		    JButton b = new JButton("Random Jumping! (once)");
-		    b.addActionListener(new ActionListener() {
+		    JButton jb = new JButton("Random Jumping! (once)");
+		    jb.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
@@ -101,18 +102,47 @@ public class Entry extends JFrame {
 				}
 			});
 		    
-		    p.add(b);
+		    p.add(jb);
 		    
-		    b = new JButton("Random posing! ");
-		    b.addActionListener(new ActionListener() {
+		    
+		    JButton tb = new JButton("Turn off spot light ");
+		    
+		    tb.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					my_glEventListener.randomPosing();
+					if(!turnSpotLight) {
+						tb.setText("Turn on spot light ");
+						my_glEventListener.turnSpotLight(!turnSpotLight);
+					} else {
+						tb.setText("Turn off spot light ");
+						my_glEventListener.turnSpotLight(!turnSpotLight);
+					}
+					turnSpotLight=!turnSpotLight;
 				}
 			});
 		    
-		    p.add(b);
+		    p.add(tb);
+		    
+		    JButton tfb = new JButton("Turn on flash light ");
+		    
+		    tfb.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if(!turnFlashLight) {
+						tfb.setText("Turn on flash light ");
+						my_glEventListener.turnFlashLight(turnFlashLight);
+					} else {
+						tfb.setText("Turn off flash light ");
+						my_glEventListener.turnFlashLight(turnFlashLight);
+					}
+					turnFlashLight=!turnFlashLight;
+				}
+			});
+		    
+		    p.add(tfb);
 		    
 		    this.add(p, BorderLayout.SOUTH);
 		    

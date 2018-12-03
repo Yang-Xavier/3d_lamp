@@ -83,7 +83,11 @@ public class HeaderNode extends NodeContainer{
 //		System.out.println(bulb.getWorldPosition()+" " + lampshade_b.getWorldPosition());
 //		System.out.println(Vec3.minus(bulb.getWorldPosition(), lampshade_b.getWorldPosition()));
 		
-	}	
+	}
+	
+	public Vec3 getBulbPosition() {
+		return bulb.getWorldPosition();
+	}
 }
 
 

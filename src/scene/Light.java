@@ -1,6 +1,9 @@
 package scene;
 
 import java.nio.*;
+import java.util.IllegalFormatFlagsException;
+import java.util.Vector;
+
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 import gmaths.*;
@@ -16,15 +19,61 @@ public class Light {
 	  private Shader shader;
 	  private Camera camera;
 	  private GL3 gl;
+	  private FlashLight flashLight;
+	  public boolean showLight = true;
+	  public boolean showFlashLight = false;
 	  
 	  public Light(GL3 gl) {
 		material = new Material();
 		material.setAmbient(0.3f, 0.3f, 0.3f);
 		material.setDiffuse(0.7f, 0.7f, 0.7f);
 		material.setSpecular(0.8f, 0.8f, 0.8f);
-		position = new Vec3(-5f,30f,-5f);
+		position = new Vec3(-5f,10f,-5f);
 		model = new Mat4(1);
 		this.gl = gl;
+		
+		
+	  }
+	  
+	  public void createFlashLight() {
+		  flashLight = new FlashLight();
+		  showFlashLight = true;
+	  }
+	  
+	  public void disposeFlashLight() {
+		  flashLight = null;
+		  showFlashLight = false;
+	  }
+	  
+	  public void openLight() {
+		  showLight = true;
+	  }
+	  
+	  public void closeLight() {
+		  showLight = false;
+	  }
+	  
+	  public void updateFlashLight(Vec3 light_position, Vec3 light_direction) {
+		  if (flashLight!=null) {
+			  flashLight.light_position = light_position;
+			  flashLight.light_direction = light_direction;
+		  }
+	  }
+	  
+	  public Vec3 getFlashPosition() {
+		  return flashLight.light_position;
+	  }
+	  
+	  public Vec3 getFlashDirect() {
+		  return flashLight.light_direction;
+	  }
+	  
+	  public boolean hasFlashLight() {
+		  if (showFlashLight)
+			  if(flashLight.light_position!=null&&flashLight.light_direction!=null)
+				  return showFlashLight;
+			  else return false;
+		  return showFlashLight;
 	  }
 	  
 	  public void setShade(String[] path) {
@@ -61,18 +110,20 @@ public class Light {
 	  }
 	  
 	  public void render(GL3 gl) { 
-		    Mat4 model = new Mat4(1);
-		    model = Mat4.multiply(Mat4Transform.scale(0.3f,0.3f,0.3f), model);
-		    model = Mat4.multiply(Mat4Transform.translate(position), model);
-		    
-		    Mat4 mvpMatrix = Mat4.multiply(camera.getPerspectiveMatrix(), Mat4.multiply(camera.getViewMatrix(), model));
-		    
-		    shader.use(gl);
-		    shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
-
-		    gl.glBindVertexArray(vertexArrayId[0]);
-		    gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
-		    gl.glBindVertexArray(0);
+		  if(showLight) {
+			    Mat4 model = new Mat4(1);
+			    model = Mat4.multiply(Mat4Transform.scale(0.3f,0.3f,0.3f), model);
+			    model = Mat4.multiply(Mat4Transform.translate(position), model);
+			    
+			    Mat4 mvpMatrix = Mat4.multiply(camera.getPerspectiveMatrix(), Mat4.multiply(camera.getViewMatrix(), model));
+			    
+			    shader.use(gl);
+			    shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
+	
+			    gl.glBindVertexArray(vertexArrayId[0]);
+			    gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
+			    gl.glBindVertexArray(0);
+		    }
 	  }
 	  
 	  public void dispose(GL3 gl) {
@@ -144,11 +195,6 @@ public class Light {
 		          vertices[base + i*step+0] = (float)x;
 		          vertices[base + i*step+1] = (float)y;
 		          vertices[base + i*step+2] = (float)z; 
-//		          vertices[base + i*step+3] = (float)x;
-//		          vertices[base + i*step+4] = (float)y;
-//		          vertices[base + i*step+5] = (float)z;
-//		          vertices[base + i*step+6] = (float)(i)/(float)(XZCSTEP-1);
-//		          vertices[base + i*step+7] = (float)(j)/(float)(YSTEP-1);
 		      }
 		    }
 		    return vertices;
@@ -168,7 +214,10 @@ public class Light {
 		      }
 		    }
 		    return indices;
-	  }
-		  
-		  
+	  }		  
+}
+
+class FlashLight{
+	Vec3 light_position;
+	Vec3 light_direction;
 }

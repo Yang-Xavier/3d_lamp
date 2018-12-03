@@ -150,7 +150,8 @@ public class BaseNode {
 	
 	public void updateWorldPosition(Mat4 worldT) {
 		float[] fs= worldT.toFloatArrayForGLSL();
-		wordPosition = new Vec3(fs[13],fs[14],fs[15]);
+		wordPosition = new Vec3(fs[12],fs[13],fs[14]);
+		
 	} 
 	
 	public Vec3 getWorldPosition() {

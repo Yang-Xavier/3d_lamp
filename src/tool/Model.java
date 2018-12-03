@@ -19,6 +19,7 @@ public class Model {
   private Camera camera;
   private Light light;
   
+  
   public Model(GL3 gl, Camera camera, Light light, Shader shader, Material material, Mat4 modelMatrix, Mesh mesh, int[] textureId1, int[] textureId2) {
     this.mesh = mesh;
     this.material = material;
@@ -58,21 +59,43 @@ public class Model {
     
     shader.setVec3(gl, "viewPos", camera.getPosition());
 
-  shader.setVec3(gl, "dir_light.direction", Constant.NATURE_LIGHT_DIRECTION);
-  shader.setVec3(gl, "dir_light.ambient", Constant.NATURE_LIGHT_AMBIENT);
-  shader.setVec3(gl, "dir_light.diffuse", Constant.NATURE_LIGHT_DIFFUSE);
-  shader.setVec3(gl, "dir_light.specular", Constant.NATURE_LIGHT_SPECULAR);
+	shader.setVec3(gl, "dir_light.direction", Constant.NATURE_LIGHT_DIRECTION);
+	shader.setVec3(gl, "dir_light.ambient", Constant.NATURE_LIGHT_AMBIENT);
+	shader.setVec3(gl, "dir_light.diffuse", Constant.NATURE_LIGHT_DIFFUSE);
+	shader.setVec3(gl, "dir_light.specular", Constant.NATURE_LIGHT_SPECULAR);
+	
 
+	if(light.hasFlashLight()) {
+		shader.setInt(gl, "flash_light.show", 1);
+		shader.setVec3(gl, "flash_light.direction", light.getFlashDirect() );
+		shader.setVec3(gl, "flash_light.position",light.getFlashPosition());
+		shader.setFloat(gl, "flash_light.cutoff", Constant.FLASH_LIGHT_CUTOFF);
+		shader.setFloat(gl, "flash_light.constant", Constant.FLASH_LIGHT_CONSTANT);
+		shader.setFloat(gl, "flash_light.linear", Constant.FLASH_LIGHT_LINEAR);
+		shader.setFloat(gl, "flash_light.quadratic", Constant.FLASH_LIGHT_QUADRATIC);
+		shader.setVec3(gl, "flash_light.ambient", Constant.FLASH_LIGHT_AMBIENT);
+		shader.setVec3(gl, "flash_light.diffuse", Constant.FLASH_LIGHT_DIFFUSE);
+		shader.setVec3(gl, "flash_light.specular", Constant.FLASH_LIGHT_SPECULAR);
+	}else {
+		shader.setInt(gl, "flash_light.show", 0);
+	}
+	
+	if(light.showLight) {
+		shader.setInt(gl, "light.show", 1);
+		shader.setVec3(gl, "light.position", light.getPosition());
+	    shader.setVec3(gl, "light.ambient", light.getMaterial().getAmbient());
+	    shader.setVec3(gl, "light.diffuse", light.getMaterial().getDiffuse());
+	    shader.setVec3(gl, "light.specular", light.getMaterial().getSpecular());
+
+	    shader.setVec3(gl, "material.ambient", material.getAmbient());
+	    shader.setVec3(gl, "material.diffuse", material.getDiffuse());
+	    shader.setVec3(gl, "material.specular", material.getSpecular());
+	    shader.setFloat(gl, "material.shininess", material.getShininess());  
+	}
+	else {
+		shader.setInt(gl, "light.show", 0);
+	}
     
-    shader.setVec3(gl, "light.position", light.getPosition());
-    shader.setVec3(gl, "light.ambient", light.getMaterial().getAmbient());
-    shader.setVec3(gl, "light.diffuse", light.getMaterial().getDiffuse());
-    shader.setVec3(gl, "light.specular", light.getMaterial().getSpecular());
-
-    shader.setVec3(gl, "material.ambient", material.getAmbient());
-    shader.setVec3(gl, "material.diffuse", material.getDiffuse());
-    shader.setVec3(gl, "material.specular", material.getSpecular());
-    shader.setFloat(gl, "material.shininess", material.getShininess());  
 
     if (textureId1!=null) {
       shader.setInt(gl, "first_texture", 0);  // be careful to match these with GL_TEXTURE0 and GL_TEXTURE1

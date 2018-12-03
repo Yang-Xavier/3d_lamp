@@ -65,6 +65,7 @@ public class Lamp extends NodeContainer{
 		bodyPole.addToLast(head);
 	}
 	
+	float lastAngle=0;
 	public void update(Camera camera,Light light) {
 		bodyPole.degree = pole_degree;
 		head.pole_drgree = pole_degree;
@@ -72,7 +73,7 @@ public class Lamp extends NodeContainer{
 		head.x_degree = shade_shake_degree;
 		
 		double theta = Math.toRadians(shade_degree);
-		double alpha = Math.toRadians(count_angle+shade_shake_degree);
+		double alpha = Math.toRadians(lastAngle-shade_shake_degree);
 		forword.x = (float) (Math.sin(theta)*Math.cos(alpha));
 		forword.y = -(float) Math.cos(theta);
 		forword.z = (float) (Math.sin(theta)*Math.sin(alpha));
@@ -82,6 +83,7 @@ public class Lamp extends NodeContainer{
 		}
 		super.update(Mat4.multiply(basisTransform, moveTransform), camera, light);
 	}
+	
 	private boolean jump  = true;
 	
 	public void randomJump() {
@@ -95,8 +97,9 @@ public class Lamp extends NodeContainer{
 	
 	private float distance,hori_v,v_v,h,x=0,y=0,g,turning_angle,forward, count_angle = 0, max_random, min_random;
 	private float compress_scale, compress_degree,final_compress_degree, a_degree,v_degree;
-	private float shade_shake_degree; int shade_shake_times;
-	private float[] X= {-4,4}, Y = {-2,2};	// limitation of the surface
+	private float shade_shake_degree; 
+	int shade_shake_times;
+	private float[] X= {-4,3}, Y = {-2.5f,2.5f};	// limitation of the surface
 	
 	private boolean turning_dirct; //true: clockwist, false:anti-clockwist
 	private float turning_step = 0;
@@ -174,6 +177,7 @@ public class Lamp extends NodeContainer{
 				transformBasis(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_angle: turning_angle,0));
 				turning_= 0;
 			} else {
+				lastAngle -=turning_dirct? -turning_step: turning_step; 
 				turning_ += turning_step;
 				transformMoving(new Vec3(0,0,0), new Vec3(0,turning_dirct? -turning_step: turning_step,0));
 			}
@@ -323,6 +327,14 @@ public class Lamp extends NodeContainer{
 	
 	private float getInterval() {
 		return (float) (getSeconds() - startTime);
+	}
+	
+	public Vec3 getForward() {
+		return forword;
+	}
+	
+	public Vec3 getBulbPosition() {
+		return head.getBulbPosition();
 	}
 	  
 	  

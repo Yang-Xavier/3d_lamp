@@ -23,5 +23,13 @@ public class Constant {
 	public static final Vec3 NATURE_LIGHT_AMBIENT = new Vec3(0.2f, 0.2f, 0.2f);
 	public static final Vec3 NATURE_LIGHT_DIFFUSE = new Vec3(0.3f, 0.3f, 0.3f);
 	public static final Vec3 NATURE_LIGHT_SPECULAR = new Vec3(0.4f, 0.4f, 0.4f);
-
+	
+	public static final float FLASH_LIGHT_CUTOFF = 0.99f;//(float)Math.cos(Math.toRadians(70));
+	public static final float FLASH_LIGHT_CONSTANT = 1;
+	public static final float FLASH_LIGHT_LINEAR = 0.09f;
+	public static final float FLASH_LIGHT_QUADRATIC = 0.032f;
+	public static final Vec3 FLASH_LIGHT_AMBIENT = new Vec3(0.1f,0.1f,0.1f);
+	public static final Vec3 FLASH_LIGHT_DIFFUSE = new Vec3(0.8f,0.8f,0.8f);
+	public static final Vec3 FLASH_LIGHT_SPECULAR = new Vec3(1f,1f,1f);
+	
 }

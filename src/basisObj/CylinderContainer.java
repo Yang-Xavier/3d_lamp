@@ -97,13 +97,6 @@ public class CylinderContainer {
 		int point_base = 0;
 		int[] indices = new int[XZSTEP*9*step];
 		
-//		for(int i = 0; i < XZSTEP; i++) {
-//			indices[base + 0] = 0;
-//			indices[base + 1] = point_base + (i+1);
-//			if (i< XZSTEP-1)	{indices[base + 2] = point_base + (i+2);}
-//			else					    { indices[base + 2] = point_base + 1;}
-//			base += step;
-//		}
 		point_base += (XZSTEP+1);
 		// top
 		for(int i = 0; i < XZSTEP; i++) {

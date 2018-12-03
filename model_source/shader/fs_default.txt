@@ -22,6 +22,8 @@ struct Material {
 uniform Material material;
 
 struct Light {
+  int show;
+  
   vec3 position;
   vec3 ambient;
   vec3 diffuse;
@@ -77,13 +79,69 @@ vec3 calcDirLight() {
 
   return (ambient + diffuse + specular);
 }
+struct FlashLight {
+  int show;
+
+  vec3  position;
+  vec3  direction;
+  float cutOff;
+  
+  float constant;
+  float linear;
+  float quadratic;
+  
+  vec3 ambient;
+  vec3 diffuse;
+  vec3 specular;
+};
+
+uniform FlashLight flash_light;
+
+vec3 calcFlashLight() {
+	vec3 lightDir = normalize(flash_light.position - aPos);
+	float theta = dot(lightDir, normalize(-flash_light.direction));
+	if(theta > 0.99f) {       
+	  vec3 ambient = flash_light.ambient * vec3(texture(first_texture, aTexCoord));
+        
+        // Diffuse 
+        vec3 norm = normalize(aNormal);        
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec3 diffuse = flash_light.diffuse * diff * vec3(texture(first_texture, aTexCoord));  
+        
+        // Specular
+        vec3 viewDir = normalize(viewPos - aPos);
+        vec3 reflectDir = reflect(-lightDir, norm);  
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+        vec3 specular = flash_light.specular * spec * vec3(texture(first_texture, aTexCoord));
+        
+        // Attenuation
+        float distance    = length(flash_light.position - aPos);
+        float attenuation = 1.0f / (flash_light.constant + flash_light.linear * distance + flash_light.quadratic * (distance * distance));    
+
+        // ambient  *= attenuation;  // Also remove attenuation from ambient, because if we move too far, the light in spotlight would then be darker than outside (since outside spotlight we have ambient lighting).
+        diffuse  *= attenuation;
+        specular *= attenuation;   
+	
+	  return (ambient + diffuse + specular);
+	}
+	else{
+		vec3 ambient = flash_light.ambient * vec3(texture(first_texture, aTexCoord));
+		return ambient;
+		}
+	
+}
 
 
 void main() {
   vec3 result = vec3(0.0);
-  result += calcSpotLight();
   result += calcDirLight();
-  
+  if(light.show ==1){
+   result += calcSpotLight();
+  }
+ 
+  if(flash_light.show ==1){
+  	result += calcFlashLight();
+  }
   
   fragColor = vec4(result, 1.0);
 }

@@ -54,6 +54,7 @@ public class MyGLEventListener implements GLEventListener {
 	    System.out.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
 	    gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); 
 	    gl.glClearDepth(1.0f);
+
 	    gl.glEnable(GL.GL_DEPTH_TEST);	// render the foremost object
 	    gl.glDepthFunc(GL.GL_LESS);	
 	    gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
@@ -79,6 +80,7 @@ public class MyGLEventListener implements GLEventListener {
 		light = new Light(gl);
 		light.setShade(new String[] {Constant.DEFAULT_LIGHT_VS, Constant.DEFAULT_LIGHT_FS});
 	    light.setCamera(camera);
+	    
 	    // build model	    
 	    
 	    space  = new Space(gl);
@@ -91,6 +93,9 @@ public class MyGLEventListener implements GLEventListener {
 	    desk.initial();
 	    books.initial();
 	    penContanier.initial();
+	    
+//	    light.createFlashLight();
+	    
 	}
 	
 	
@@ -106,12 +111,14 @@ public class MyGLEventListener implements GLEventListener {
 	    books.render(camera, light, gl);
 	    penContanier.render(camera, light, gl);
 	    
-	    updateLamp();
+	    
 	    lamp.render(camera, light);
+	    updateLamp();
 	}
 	
 	public void updateLamp() {
 		lamp.update(camera, light);
+		light.updateFlashLight(lamp.getBulbPosition(), lamp.getForward());
 	}
 	
 	  private Vec3 getLightPosition() {
@@ -147,6 +154,22 @@ public class MyGLEventListener implements GLEventListener {
 //		      randoms[i] = (float)Math.random();
 //		    }
 //		  }
+	  	
+	  public void turnSpotLight(boolean status) {
+		if (status) {
+			light.openLight();
+		} else {
+			light.closeLight();
+		}
+	}
+	  
+	  public void turnFlashLight(boolean status) {
+		  if (status) {
+				light.createFlashLight();
+			} else {
+				light.disposeFlashLight();
+			}
+	  }
 	  
 		public void randomJump() {
 			lamp.randomJump();
