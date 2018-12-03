@@ -23,7 +23,11 @@ public class Books extends ModelContainer{
 		super(gl);
 		// TODO Auto-generated constructor stub
 		texture_b = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"paper.jpg");
-		f1 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"book1.jpeg");
+		f1 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"book1.jpg");
+		f2 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"book2.jpg");
+		f3 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"book3.jpg");
+		f4 = TextureLibrary.loadTexture(gl, Constant.TEXTURE_BASEPATH+"book4.jpeg");
+		
 		book1 = new Book(gl); 
 		book2 = new Book(gl);
 		book3 = new Book(gl); 
@@ -39,6 +43,10 @@ public class Books extends ModelContainer{
 		book3.setTexture(texture_b);
 		book4.setTexture(texture_b);
 		
+		bf1.setTexture(f1);
+		bf2.setTexture(f2);
+		bf3.setTexture(f3);
+		bf4.setTexture(f4);
 		
 		baseAxis = new Vec3( 0f, 5f, -7f);
 		
@@ -60,19 +68,30 @@ public class Books extends ModelContainer{
 		book1.scale(1.2f,0.3f,2f);
 		book1.rotate(0,15,0);
 		book1.translate(Vec3.add(baseAxis, new Vec3(5f,0.3f,-1f)));
-		
+		bf1.scale(1.2f,0.1f,2f);
+		bf1.rotate(0,15,0);
+		bf1.translate(Vec3.add(baseAxis, new Vec3(5f,0.46f,-1f)));
 		
 		book2.scale(1.2f,0.3f,2f);
 		book2.rotate(0,-10,0);
 		book2.translate(Vec3.add(baseAxis, new Vec3(5.2f,0.6f,-1.1f)));
+		bf2.scale(1.2f,0.1f,2f);
+		bf2.rotate(0,-10,0);
+		bf2.translate(Vec3.add(baseAxis, new Vec3(5.2f,0.76f,-1.1f)));
 		
 		book3.scale(1.2f,0.3f,2f);
 		book3.rotate(0,0,-25);
 		book3.translate(Vec3.add(baseAxis, new Vec3(6.2f,0.65f,-1.1f)));
+		bf3.scale(1.2f,0.1f,2f);
+		bf3.rotate(0,0,-25);
+		bf3.translate(Vec3.add(baseAxis, new Vec3(6.3f,0.83f,-1.1f)));
 		
 		book4.scale(1.2f,0.3f,2f);
 		book4.rotate(0,110,0);
 		book4.translate(Vec3.add(baseAxis, new Vec3(5.2f,0.6f,1.3f)));
+		bf4.scale(1.2f,0.1f,2f);
+		bf4.rotate(0,110,0);
+		bf4.translate(Vec3.add(baseAxis, new Vec3(5.2f,0.76f,1.3f)));
 	}
 }
 
@@ -90,7 +109,7 @@ class BookFace extends BaseModel {
 	public BookFace(GL3 gl) {
 		super(gl);
 		// TODO Auto-generated constructor stub
-		super.mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+		super.mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
 		super.shader = new Shader(gl, Constant.DEFAULT_VS, Constant.DEFAULT_FS);
 		super.material = new Material(Constant.DEFAULT_AMBIENT,Constant.DEFAULT_DIFFUSE,Constant.DEFAULT_SPECULAR, Constant.DEFAULT_SHIININESS);
 	} 
